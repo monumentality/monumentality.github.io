@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "bid scheduler"
+title:  "big data and ssd"
 date: 2016-03-13
 categories: research
 ---
