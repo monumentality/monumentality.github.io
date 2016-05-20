@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "stupid scheduler""
-date: 2016-03-13
+title:  "stupid scheduler"
+date: 2016-05-19
 categories: cs
 ---
 
