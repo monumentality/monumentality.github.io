@@ -1,9 +1,10 @@
 ---
 layout: post
-title:  "stupid scheduler"
-date: 2016-05-19
+title:  "you and your research - by Richard Hamming "
+date: 2016-03-13
 categories: cs
 ---
+
 
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
@@ -31,21 +32,19 @@ categories: cs
 <li><a href="#sec-4">4. 基于竞价方式的资源调度</a>
 <ul>
 <li><a href="#sec-4-1">4.1. 机制</a></li>
-<li><a href="#sec-4-2">4.2. trade off</a></li>
-<li><a href="#sec-4-3">4.3. 策略；</a>
+<li><a href="#sec-4-2">4.2. 策略；</a>
 <ul>
-<li><a href="#sec-4-3-1">4.3.1. 资源分类：</a></li>
-<li><a href="#sec-4-3-2">4.3.2. 提供的接口</a></li>
+<li><a href="#sec-4-2-1">4.2.1. 资源分类：</a></li>
+<li><a href="#sec-4-2-2">4.2.2. 市场机制：</a></li>
+<li><a href="#sec-4-2-3">4.2.3. 伸缩策略：</a></li>
+<li><a href="#sec-4-2-4">4.2.4. 支持更多请求：</a></li>
+<li><a href="#sec-4-2-5">4.2.5. 提供的接口</a></li>
 </ul>
 </li>
+<li><a href="#sec-4-3">4.3. trade off</a></li>
 </ul>
 </li>
-<li><a href="#sec-5">5. 理论证明：</a>
-<ul>
-<li><a href="#sec-5-1">5.1. 之前的计算资源价值最大的证明方法不好，因为已经被市场理论所证明，没有必要再重述</a></li>
-<li><a href="#sec-5-2">5.2. 使用需求和供给模型来简述系统的合理性，相关论文都不需要太多理论证明</a></li>
-</ul>
-</li>
+<li><a href="#sec-5">5. 理论证明：</a></li>
 <li><a href="#sec-6">6. bidscheduler实现</a>
 <ul>
 <li><a href="#sec-6-1">6.1. 两级调度架构：</a></li>
@@ -98,15 +97,20 @@ categories: cs
 
 ### Multi-tenancy:<a id="sec-1-1-1" name="sec-1-1-1"></a>
 
- Multi-tenancy is the ability of a single instance of software to serve multiple tenants. A tenant is a group of users that have the same view of the system. Hadoop, as an enterprise data hub, naturally demands multi-tenancy. Creating different instances of Hadoop for various users or functions is not acceptable as it makes it harder to share data across departments and creates silos.
+Multi-tenancy is the ability of a single instance of software to serve multiple tenants. A tenant is a group of users that have the same view of the system. Hadoop, as an enterprise data hub, naturally demands multi-tenancy. Creating different instances of Hadoop for various users or functions is not acceptable as it makes it harder to share data across departments and creates silos.
+
 多租户是使用某个软件的一个实例来服务多个租户。对系统拥有某一相同视图的一组用户是一个租户。通常租户可以是企业内部的部门或用户
 
 ### From an administrator’s perspective, multi-tenancy requirements are to<a id="sec-1-1-2" name="sec-1-1-2"></a>
 
 Ensure SLAs are met 满足每个用户的服务层协议
+
 Guarantee isolation 提供资源隔离
+
 Enforce quotas      约束每个用户的配额
+
 Establish security and delegation 确立安全和委派
+
 Ensure low cost operations and simpler manageability 低运维成本和简化管理
 
 ### 从用户角度看<a id="sec-1-1-3" name="sec-1-1-3"></a>
@@ -118,26 +122,34 @@ Ensure low cost operations and simpler manageability 低运维成本和简化管
 ### 服务：<a id="sec-1-2-1" name="sec-1-2-1"></a>
 
 web服务的sla非常严格，云计算提供商都声称其提供的计算资源，cpu，内存是隔离的
+
 web服务所需资源，下限由应用程序设计决定，随并发访问量线性增长，既需要预留资源，还需要能弹性伸缩
 
 ### 大数据：<a id="sec-1-2-2" name="sec-1-2-2"></a>
 
 分布式应用，总的能够使用的资源上限由数据集大小决定，每个container的大小由应用程序的设计决定
+
 hadoop和yarn和mesos和kubernetes的做法都是：
 用户提交请求时，指定所需的每个container大小，需要多少个container
 
 # background: 现有的多租户环境下的资源调度算法<a id="sec-2" name="sec-2"></a>
 
 yarn:优先级，队列，分层级的优先级列队，最小最大公平算法
+
 mesos：DRF 主要资源公平算法
+
 yarn对多租户的支持更多，mesos更侧重公平，缺少多租户支持
 
 # 动机<a id="sec-3" name="sec-3"></a>
 
 公平算法，所运行作业本身的价值不同；租户设定优先级，没有一个全知全能的管理员来设定优先级。
+
 基于自由市场的经济模型实现一个调度算法，依靠市场的资源配置功能实现计算资源的分配，使最高估价的作业最先得到资源。
+
 当运行在支持资源弹性伸缩的公有云，私有云，混合云环境下时，我们还可以利用需求量和价格，调整资源供给，以达到价格和资源的均衡。
+
 另外，通过把资源分为可靠资源和不可靠资源，cgroup动态调整资源配额的技术，在充分利用空闲资源，满足更多资源请求的同时，确保不中断正在运行的作业，只降低这些作业的性能。
+
 通过以上机制，此资源调度框实现了利用市场机制配置资源，计算资源需求和供给的均衡，并且提升了集群的资源利用率，满足更多的资源请求。
 
 # 基于竞价方式的资源调度<a id="sec-4" name="sec-4"></a>
@@ -146,30 +158,46 @@ yarn对多租户的支持更多，mesos更侧重公平，缺少多租户支持
 
 平台资源数量是有限的，发给每个租户虚拟币，租户使用虚拟币来对资源竞标，出价高者获得资源
 
-## trade off<a id="sec-4-2" name="sec-4-2"></a>
+## 策略；<a id="sec-4-2" name="sec-4-2"></a>
 
-用户使用更复杂，用户需要权衡每个作业的重要性，选择为每个作业给出合适的竞价
-用户需要关注整个平台的竞价排名，确保自己的作业按照预期完成
-
-## 策略；<a id="sec-4-3" name="sec-4-3"></a>
-
-### 资源分类：<a id="sec-4-3-1" name="sec-4-3-1"></a>
+### 资源分类：<a id="sec-4-2-1" name="sec-4-2-1"></a>
 
 可靠资源，受限制资源
 可靠资源和受限制资源都是通过cgroup的cpu和内存的上限控制
 受限制资源受cgroup的软限制控制，当系统资源不足的时候，优先释放受软限制的资源
 
-### 提供的接口<a id="sec-4-3-2" name="sec-4-3-2"></a>
+### 市场机制：<a id="sec-4-2-2" name="sec-4-2-2"></a>
+
+把集群初始化后所有的可用资源作为可靠资源，
+有空闲资源时，所有请求都获得可靠资源
+当可靠资源分配完毕后，对于一个新的资源请求a，
+如果a出价高于已经分配到可靠资源的请求b，把b转换为不可靠资源，a获得可靠资源；如果a出价低于所有已获得可靠资源的请求，检查系统是否有空闲资源（系统资源利用率低），如果有，就分给a不可靠资源。
+
+### 伸缩策略：<a id="sec-4-2-3" name="sec-4-2-3"></a>
+
+当系统中平均资源价格高于扩容代价时，系统进行扩容
+当系统中平均资源价格低于收缩收益时，系统进行收缩
+
+### 支持更多请求：<a id="sec-4-2-4" name="sec-4-2-4"></a>
+
+虽然系统的能分配的可靠资源是有限的，但是很多分配出去的资源没有被充分利用，这些资源作为不可靠资源可以被其他出价更低的资源请求使用。当原来申请了可靠资源但是没有使用的作业开始使用这些资源时，使用不可靠资源的请求就会被降低资源使用量，释放出的资源被自动分给使用可靠资源的应用程序。
+
+### 提供的接口<a id="sec-4-2-5" name="sec-4-2-5"></a>
 
 allocate(job<sub>allocation</sub><sub>request</sub>)
 release(allocation)
 change<sub>bidprice</sub>(allocation)
 
+## trade off<a id="sec-4-3" name="sec-4-3"></a>
+
+用户使用更复杂，用户需要权衡每个作业的重要性，选择为每个作业给出合适的竞价
+用户需要关注整个平台的竞价排名，确保自己的作业按照预期完成
+
 # 理论证明：<a id="sec-5" name="sec-5"></a>
 
-## 之前的计算资源价值最大的证明方法不好，因为已经被市场理论所证明，没有必要再重述<a id="sec-5-1" name="sec-5-1"></a>
+之前的计算资源价值最大的证明方法不好，因为已经被市场理论所证明，没有必要再重述
 
-## 使用需求和供给模型来简述系统的合理性，相关论文都不需要太多理论证明<a id="sec-5-2" name="sec-5-2"></a>
+使用需求和供给模型来简述系统的合理性，相关论文都不需要太多理论证明
 
 # bidscheduler实现<a id="sec-6" name="sec-6"></a>
 
