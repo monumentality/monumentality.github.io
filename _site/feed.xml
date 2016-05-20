@@ -5,164 +5,12 @@
     <description></description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 20 May 2016 12:35:34 +0800</pubDate>
-    <lastBuildDate>Fri, 20 May 2016 12:35:34 +0800</lastBuildDate>
+    <pubDate>Fri, 20 May 2016 12:36:53 +0800</pubDate>
+    <lastBuildDate>Fri, 20 May 2016 12:36:53 +0800</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
-        <title>Two concepts of social structure</title>
-        <description>&lt;p&gt;It seems to me that there are two very different common schools of thought on how organizations are structured. They have been competing for at least ten thousand years, since the agrarian movement started getting into conflict with the hunter-gatherers.&lt;/p&gt;
-
-&lt;p&gt;In American culture today, the hierarchical theory of organizations is so deeply ingrained that many people are completely unaware of it. This theory represents social structures as pyramids, with the serfs on the bottom and various layers of leaders leading up to the supreme commander on the top. Examples are the Catholic Church and the armed forces.&lt;/p&gt;
-
-&lt;p&gt;Two of the assumptions in this model bother me:&lt;/p&gt;
-
-&lt;p&gt;That the people above are smarter than the ones below and they know better what is going on;
-That watching over other people is a more important activity than producing actual goods and services.
-In Illuminatus!, a satirical study of social pathologies, Robert Anton Wilson and Robert Shea brought out an important principal that causes trouble in hierarchies: the Snafu Principle. People tend to say what they think the boss wants to hear, especially if they have noticed that the practice of ``shooting the messenger’’ is common. This means that the information passed up the pyramid is distorted at each level. Thus, each higher layer of managers tends to have less and less contact with reality, and near the top they are often completely out of touch.&lt;/p&gt;
-
-&lt;p&gt;The other model might be called the network model. People are connected, but not in pyramids. There is no ``alpha male’’ at the top of the heap; there is not even any concept of higher and lower. Power is distributed much more evenly.&lt;/p&gt;
-
-&lt;p&gt;The best practical book I’ve seen on alternatives to hierarchies is Stewardship by Peter Block (Berrett-Kohler, 1993, ISBN 1-881052-28-1). This inspiring book gives a complete plan for building organizations that work. Block is not a dreamer; his principles were derived from real corporate war stories, and are being applied in highly competitive businesses with good results. His goal is to make our economy efficient and competitive. The results look equally promising for application to public organizations such as schools and regulatory agencies. The preface to this book makes an important point: why is it that in our supposedly democratic society, our workplaces are so often dictatorships?&lt;/p&gt;
-
-&lt;p&gt;Further up the organization by Robert Townsend (Harper &amp;amp; Row, 1984, ISBN 0-06-097136-3) is an older work by a famous hell-raiser and CEO that seems to presage Block’s work in Stewardship. Another vote for redesigning the way our organizations work.&lt;/p&gt;
-
-&lt;p&gt;In the book In the absence of the sacred: the failure of technology and the survival of the Indian nations, Jerry Mander gives a deeply insightful history of the long-running conflict between the two world-views. His message is disturbing: the hierarchical culture is not indefinitely sustainable.&lt;/p&gt;
-
-&lt;p&gt;So how do we change institutions that aren’t working? I think Gandhi had some pretty good ideas.&lt;/p&gt;
-
-&lt;p&gt;Practicing problem-solvers who are frustrated because some of their best work has been spoiled by organizational pathologies should read the work of William L. Livingston, especially Have Fun at Work.&lt;/p&gt;
-
-&lt;p&gt;Accidental Empires, by Robert X. Cringely (Harper Business, 1992, ISBN 0-88730-621-7), Hackers by Steven Levy (Dell, 1984, ISBN 0-440-13405-6), and The Soul of a New Machine by Tracy Kidder (Little, Brown, 1981, ISBN 0316491705) are good depictions of life in the world of Real Programmers that ring true based on my own experience. These books also have good insights into the strange world of startups: why they succeed or fail, and what happens to the people who propel them. Although Kidder’s book sounds very upbeat, De Marco notes in Peopleware (see `Readings in human factors’) that almost everyone left the company shortly after the period described in the book.&lt;/p&gt;
-</description>
-        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</guid>
-        
-        
-        <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>The Noel Smith-Wenkle Salary Negotiation Method</title>
-        <description>&lt;p&gt;Salary negotiation is something at which hiring managers are usually a lot more proficient than the people they hire. In the interest of leveling the playing field, here is a method for salary negotiation that has worked for me and many others.&lt;/p&gt;
-
-&lt;p&gt;Noel Smith-Wenkle is a headhunter, and he taught me this method in about 1982. Headhunters’ fees are proportional to the salary that their clients get, so it is in their interest to get as much as possible.&lt;/p&gt;
-
-&lt;p&gt;Disclaimer: This method was tuned for the hiring climate for sought-after software developers in Silicon Valley in the early 80s, so it may not work for any given situation. However, I think the principles have general applicability. Your mileage may vary.&lt;/p&gt;
-
-&lt;p&gt;Fundamentals&lt;/p&gt;
-
-&lt;p&gt;Salaries depend mainly on two things: the work and the geographical area. Most companies share salary data with each other: the typical big-company personnel department will have detailed breakdowns on the distribution of salaries for their types of work and locales. So they will generally know within a pretty narrow range what your job is worth.&lt;/p&gt;
-
-&lt;p&gt;To save labor costs, almost all companies play a nasty little game. They ask you how much you want. Sometimes there’s a slot on your application named something innocent like “desired salary range.” Most people automatically fill in all blanks on a form, so they’ll put down a figure.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, many people underestimate their worth, so they’ll put down a low figure, less than the company was prepared to pay. It’s a rare company who will offer you what you’re worth in this situation. Some companies will even bargain down your already undervalued amount.&lt;/p&gt;
-
-&lt;p&gt;You’re happy because you got what you asked for (or nearly so), and they’re happy because they’re underpaying you and you’re not likely to realize it.&lt;/p&gt;
-
-&lt;p&gt;So, the bottom line is: Don’t tell them how much you’ll take.&lt;/p&gt;
-
-&lt;p&gt;Before you begin negotiating, you must have a minimum salary figure in mind. If at all possible, you should talk to several people who are doing similar work in an area with similar living costs. Watch out! People from rural New Mexico, for example, have no idea how ungodly expensive it is to live in the Bay Area or Boston.&lt;/p&gt;
-
-&lt;p&gt;Remember the bottom line, though: have a minimum figure in your head, but don’t tell them.&lt;/p&gt;
-
-&lt;p&gt;The purpose of the method is to get the company to be the first party to name a number. If it’s above your minimum, you accept. If it’s too low, you tell them it’s too low, but you do not say by how much. They will either break off negotiations or come back with a higher offer. Your only responses are either “okay” or “higher”, never “X amount higher.”&lt;/p&gt;
-
-&lt;p&gt;The method in action&lt;/p&gt;
-
-&lt;p&gt;If they try to get you to name a figure on the application, leave it blank. You want them to ask for a number verbally.&lt;/p&gt;
-
-&lt;p&gt;Step 1. The first time they ask you how much you’ll take, reply:&lt;/p&gt;
-
-&lt;p&gt;I am much more interested in doing (type of work) here at (name of company) than I am in the size of the initial offer.&lt;/p&gt;
-
-&lt;p&gt;This sentence is constructed with great care. You may want to memorize it. It does several things for you. It’s great public relations. The vast majority of people answer their question with a number. Because you have focused on the job and not on the compensation, you have instantly distinguished yourself from the thundering herd. You have also dodged their question.
-Noel said that about 40% of the time this is all you need, and the hiring manager will go off and look up your numbers and make you a fair offer. However, over half the time, they will ask you again.&lt;/p&gt;
-
-&lt;p&gt;Step 2. The second time they ask, reply:&lt;/p&gt;
-
-&lt;p&gt;I will consider any reasonable offer.&lt;/p&gt;
-
-&lt;p&gt;This is basically a stalling tactic. The word ‘consider’ has a lot of leeway in it. Add to this the large amount of slop in the word ‘reasonable’, and obviously the sentence has no meaning at all. But you’ve been polite, and once more you’ve refused to name the first figure.
-Noel said that in only about 30% of the cases was it necessary to go to step 3.&lt;/p&gt;
-
-&lt;p&gt;Step 3.&lt;/p&gt;
-
-&lt;p&gt;You are in a much better position to know how much I’m worth to you than I am.&lt;/p&gt;
-
-&lt;p&gt;Once again, you have been polite, and again you have refused to name a number. You have also told them, in so many words, that you are onto their little game. If they ask a fourth or even a fifth time how much you’ll take (Noel said it rarely happens), repeat step 3.&lt;/p&gt;
-
-&lt;p&gt;我读过的最好的如何谈薪水的文章，不过实际应用还有一些因素要考虑：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;使用这样的策略将会塑造你的个人形象：公司会认为应聘者是一个主动进取，敢于冒险的人。如果你对这样的个人形象感到不适，不要尝试&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;如果是独立的人力资源来面试你，不必过分担心自己的个人形象；如果是未来的上司来谈薪水，要注意保持个人形象的统一性&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;某些企业文化不喜欢有冒险精神，独立思考，有进取心的员工，不要采取这种策略。比如华为？某些创业公司非常看重进取精神，应当果断使用&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;观察猜测HR的性格：有些人不能接受应聘者占据主动权，有些人是感性型大过理性型。面对这两种人需要采用完全相反的策略&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;核心原则是：尽最大努力让对方先说一个数字，这表示公司更需要你，而不是你更需要这份工作。这将会后续具体谈判打下一个坚固的基础&lt;/p&gt;
-</description>
-        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</guid>
-        
-        
-        <category>research</category>
-        
-      </item>
-    
-      <item>
-        <title>Gandhi: an approach to nonviolent social change</title>
-        <description>&lt;p&gt;The book ``Conquest of Violence’’ by Joan V. Bondurant (University of California Press, 1965, ISBN 0-520-00145-1) is an excellent summary of both the why and the how of satyagraha, Gandhi’s science of social change.&lt;/p&gt;
-
-&lt;p&gt;Although nonviolence is the core of satyagraha, there is a lot more to it than that. Here are some relevant points; quoted material is from Bondurant’s book.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;The idea is not to beat the other side, but to come to a workable agreement that respects the needs of both sides. Rather than investing a lot of energy hating the opponent, try to see things from their side. Better yet, work out a solution that makes them look good. ‘Every effort should be made to win over the opponent by helping him (where this is consistent with the satyagrahi’s true objectives) thereby demonstrating sincerity to achieve an agreement with, rather than a triumph over, the adversary.’&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;The first step in a satyagraha campaign is to try to redress grievances through established procedures. If you don’t first try to work within the system, how can you claim that the system is unresponsive?&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;‘Refrain from insults and swearing. Protect opponents from insult or attack, even at the risk of life.’ There is a message here for people who like to flame. Personal attacks tend to derail debate from the constructive to the combative.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Although most people associate Gandhi with civil disobedience, this is one of the last, most extreme forms of protest, to be undertaken only after a long list of other means have failed.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Gandhi’s autobiography is, of course, highly recommended, and I also thought Richard Attenborough’s movie ``Gandhi’’ was an excellent introduction to the topic.&lt;/p&gt;
-
-&lt;p&gt;Once a man came to Gandhi and admitted that he had killed a Muslim in a religious conflict. He felt badly that he had orphaned the Muslim’s son. Gandhi suggested that he raise the orphaned son as his own, but insisted that the boy be raised Muslim. This story, to me, sums up the method in a nutshell, especially the principal of respecting the other’s point of view.&lt;/p&gt;
-
-&lt;p&gt;It is all too easy to demonize the opponent. So often, though, when I find myself hating, later I realize that I am at war with some aspect of myself that I see in the opponent. So this important work, of trying to understand other points of view, ultimately leads to better integration with some of the exiled parts of my own psyche.&lt;/p&gt;
-
-&lt;p&gt;曾经我感到到自己憎恨对手的某一面，之后我发现恰恰是因为对手的这一面也存在于我自身之中。因此试着从不同的视觉看问题，最终将找回被驱逐的部分灵魂，使自己的灵魂完整。&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</guid>
-        
-        
-        <category>cs</category>
-        
-      </item>
-    
-      <item>
-        <title>you and your research - by Richard Hamming </title>
+        <title>stupid scheduler</title>
         <description>&lt;div id=&quot;table-of-contents&quot;&gt;
 &lt;h2&gt;Table of Contents&lt;/h2&gt;
 &lt;div id=&quot;text-table-of-contents&quot;&gt;
@@ -931,9 +779,161 @@ def allocate(job_allocation_request):
 &lt;/div&gt;
 &lt;/div&gt;
 </description>
-        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/03/13/stupid_scheduler.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/03/13/stupid_scheduler.html</guid>
+        <pubDate>Thu, 19 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/05/19/stupid_scheduler.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/19/stupid_scheduler.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+      <item>
+        <title>Two concepts of social structure</title>
+        <description>&lt;p&gt;It seems to me that there are two very different common schools of thought on how organizations are structured. They have been competing for at least ten thousand years, since the agrarian movement started getting into conflict with the hunter-gatherers.&lt;/p&gt;
+
+&lt;p&gt;In American culture today, the hierarchical theory of organizations is so deeply ingrained that many people are completely unaware of it. This theory represents social structures as pyramids, with the serfs on the bottom and various layers of leaders leading up to the supreme commander on the top. Examples are the Catholic Church and the armed forces.&lt;/p&gt;
+
+&lt;p&gt;Two of the assumptions in this model bother me:&lt;/p&gt;
+
+&lt;p&gt;That the people above are smarter than the ones below and they know better what is going on;
+That watching over other people is a more important activity than producing actual goods and services.
+In Illuminatus!, a satirical study of social pathologies, Robert Anton Wilson and Robert Shea brought out an important principal that causes trouble in hierarchies: the Snafu Principle. People tend to say what they think the boss wants to hear, especially if they have noticed that the practice of ``shooting the messenger’’ is common. This means that the information passed up the pyramid is distorted at each level. Thus, each higher layer of managers tends to have less and less contact with reality, and near the top they are often completely out of touch.&lt;/p&gt;
+
+&lt;p&gt;The other model might be called the network model. People are connected, but not in pyramids. There is no ``alpha male’’ at the top of the heap; there is not even any concept of higher and lower. Power is distributed much more evenly.&lt;/p&gt;
+
+&lt;p&gt;The best practical book I’ve seen on alternatives to hierarchies is Stewardship by Peter Block (Berrett-Kohler, 1993, ISBN 1-881052-28-1). This inspiring book gives a complete plan for building organizations that work. Block is not a dreamer; his principles were derived from real corporate war stories, and are being applied in highly competitive businesses with good results. His goal is to make our economy efficient and competitive. The results look equally promising for application to public organizations such as schools and regulatory agencies. The preface to this book makes an important point: why is it that in our supposedly democratic society, our workplaces are so often dictatorships?&lt;/p&gt;
+
+&lt;p&gt;Further up the organization by Robert Townsend (Harper &amp;amp; Row, 1984, ISBN 0-06-097136-3) is an older work by a famous hell-raiser and CEO that seems to presage Block’s work in Stewardship. Another vote for redesigning the way our organizations work.&lt;/p&gt;
+
+&lt;p&gt;In the book In the absence of the sacred: the failure of technology and the survival of the Indian nations, Jerry Mander gives a deeply insightful history of the long-running conflict between the two world-views. His message is disturbing: the hierarchical culture is not indefinitely sustainable.&lt;/p&gt;
+
+&lt;p&gt;So how do we change institutions that aren’t working? I think Gandhi had some pretty good ideas.&lt;/p&gt;
+
+&lt;p&gt;Practicing problem-solvers who are frustrated because some of their best work has been spoiled by organizational pathologies should read the work of William L. Livingston, especially Have Fun at Work.&lt;/p&gt;
+
+&lt;p&gt;Accidental Empires, by Robert X. Cringely (Harper Business, 1992, ISBN 0-88730-621-7), Hackers by Steven Levy (Dell, 1984, ISBN 0-440-13405-6), and The Soul of a New Machine by Tracy Kidder (Little, Brown, 1981, ISBN 0316491705) are good depictions of life in the world of Real Programmers that ring true based on my own experience. These books also have good insights into the strange world of startups: why they succeed or fail, and what happens to the people who propel them. Although Kidder’s book sounds very upbeat, De Marco notes in Peopleware (see `Readings in human factors’) that almost everyone left the company shortly after the period described in the book.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+      <item>
+        <title>The Noel Smith-Wenkle Salary Negotiation Method</title>
+        <description>&lt;p&gt;Salary negotiation is something at which hiring managers are usually a lot more proficient than the people they hire. In the interest of leveling the playing field, here is a method for salary negotiation that has worked for me and many others.&lt;/p&gt;
+
+&lt;p&gt;Noel Smith-Wenkle is a headhunter, and he taught me this method in about 1982. Headhunters’ fees are proportional to the salary that their clients get, so it is in their interest to get as much as possible.&lt;/p&gt;
+
+&lt;p&gt;Disclaimer: This method was tuned for the hiring climate for sought-after software developers in Silicon Valley in the early 80s, so it may not work for any given situation. However, I think the principles have general applicability. Your mileage may vary.&lt;/p&gt;
+
+&lt;p&gt;Fundamentals&lt;/p&gt;
+
+&lt;p&gt;Salaries depend mainly on two things: the work and the geographical area. Most companies share salary data with each other: the typical big-company personnel department will have detailed breakdowns on the distribution of salaries for their types of work and locales. So they will generally know within a pretty narrow range what your job is worth.&lt;/p&gt;
+
+&lt;p&gt;To save labor costs, almost all companies play a nasty little game. They ask you how much you want. Sometimes there’s a slot on your application named something innocent like “desired salary range.” Most people automatically fill in all blanks on a form, so they’ll put down a figure.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, many people underestimate their worth, so they’ll put down a low figure, less than the company was prepared to pay. It’s a rare company who will offer you what you’re worth in this situation. Some companies will even bargain down your already undervalued amount.&lt;/p&gt;
+
+&lt;p&gt;You’re happy because you got what you asked for (or nearly so), and they’re happy because they’re underpaying you and you’re not likely to realize it.&lt;/p&gt;
+
+&lt;p&gt;So, the bottom line is: Don’t tell them how much you’ll take.&lt;/p&gt;
+
+&lt;p&gt;Before you begin negotiating, you must have a minimum salary figure in mind. If at all possible, you should talk to several people who are doing similar work in an area with similar living costs. Watch out! People from rural New Mexico, for example, have no idea how ungodly expensive it is to live in the Bay Area or Boston.&lt;/p&gt;
+
+&lt;p&gt;Remember the bottom line, though: have a minimum figure in your head, but don’t tell them.&lt;/p&gt;
+
+&lt;p&gt;The purpose of the method is to get the company to be the first party to name a number. If it’s above your minimum, you accept. If it’s too low, you tell them it’s too low, but you do not say by how much. They will either break off negotiations or come back with a higher offer. Your only responses are either “okay” or “higher”, never “X amount higher.”&lt;/p&gt;
+
+&lt;p&gt;The method in action&lt;/p&gt;
+
+&lt;p&gt;If they try to get you to name a figure on the application, leave it blank. You want them to ask for a number verbally.&lt;/p&gt;
+
+&lt;p&gt;Step 1. The first time they ask you how much you’ll take, reply:&lt;/p&gt;
+
+&lt;p&gt;I am much more interested in doing (type of work) here at (name of company) than I am in the size of the initial offer.&lt;/p&gt;
+
+&lt;p&gt;This sentence is constructed with great care. You may want to memorize it. It does several things for you. It’s great public relations. The vast majority of people answer their question with a number. Because you have focused on the job and not on the compensation, you have instantly distinguished yourself from the thundering herd. You have also dodged their question.
+Noel said that about 40% of the time this is all you need, and the hiring manager will go off and look up your numbers and make you a fair offer. However, over half the time, they will ask you again.&lt;/p&gt;
+
+&lt;p&gt;Step 2. The second time they ask, reply:&lt;/p&gt;
+
+&lt;p&gt;I will consider any reasonable offer.&lt;/p&gt;
+
+&lt;p&gt;This is basically a stalling tactic. The word ‘consider’ has a lot of leeway in it. Add to this the large amount of slop in the word ‘reasonable’, and obviously the sentence has no meaning at all. But you’ve been polite, and once more you’ve refused to name the first figure.
+Noel said that in only about 30% of the cases was it necessary to go to step 3.&lt;/p&gt;
+
+&lt;p&gt;Step 3.&lt;/p&gt;
+
+&lt;p&gt;You are in a much better position to know how much I’m worth to you than I am.&lt;/p&gt;
+
+&lt;p&gt;Once again, you have been polite, and again you have refused to name a number. You have also told them, in so many words, that you are onto their little game. If they ask a fourth or even a fifth time how much you’ll take (Noel said it rarely happens), repeat step 3.&lt;/p&gt;
+
+&lt;p&gt;我读过的最好的如何谈薪水的文章，不过实际应用还有一些因素要考虑：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;使用这样的策略将会塑造你的个人形象：公司会认为应聘者是一个主动进取，敢于冒险的人。如果你对这样的个人形象感到不适，不要尝试&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果是独立的人力资源来面试你，不必过分担心自己的个人形象；如果是未来的上司来谈薪水，要注意保持个人形象的统一性&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;某些企业文化不喜欢有冒险精神，独立思考，有进取心的员工，不要采取这种策略。比如华为？某些创业公司非常看重进取精神，应当果断使用&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;观察猜测HR的性格：有些人不能接受应聘者占据主动权，有些人是感性型大过理性型。面对这两种人需要采用完全相反的策略&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;核心原则是：尽最大努力让对方先说一个数字，这表示公司更需要你，而不是你更需要这份工作。这将会后续具体谈判打下一个坚固的基础&lt;/p&gt;
+</description>
+        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</guid>
+        
+        
+        <category>research</category>
+        
+      </item>
+    
+      <item>
+        <title>Gandhi: an approach to nonviolent social change</title>
+        <description>&lt;p&gt;The book ``Conquest of Violence’’ by Joan V. Bondurant (University of California Press, 1965, ISBN 0-520-00145-1) is an excellent summary of both the why and the how of satyagraha, Gandhi’s science of social change.&lt;/p&gt;
+
+&lt;p&gt;Although nonviolence is the core of satyagraha, there is a lot more to it than that. Here are some relevant points; quoted material is from Bondurant’s book.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The idea is not to beat the other side, but to come to a workable agreement that respects the needs of both sides. Rather than investing a lot of energy hating the opponent, try to see things from their side. Better yet, work out a solution that makes them look good. ‘Every effort should be made to win over the opponent by helping him (where this is consistent with the satyagrahi’s true objectives) thereby demonstrating sincerity to achieve an agreement with, rather than a triumph over, the adversary.’&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The first step in a satyagraha campaign is to try to redress grievances through established procedures. If you don’t first try to work within the system, how can you claim that the system is unresponsive?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;‘Refrain from insults and swearing. Protect opponents from insult or attack, even at the risk of life.’ There is a message here for people who like to flame. Personal attacks tend to derail debate from the constructive to the combative.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Although most people associate Gandhi with civil disobedience, this is one of the last, most extreme forms of protest, to be undertaken only after a long list of other means have failed.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Gandhi’s autobiography is, of course, highly recommended, and I also thought Richard Attenborough’s movie ``Gandhi’’ was an excellent introduction to the topic.&lt;/p&gt;
+
+&lt;p&gt;Once a man came to Gandhi and admitted that he had killed a Muslim in a religious conflict. He felt badly that he had orphaned the Muslim’s son. Gandhi suggested that he raise the orphaned son as his own, but insisted that the boy be raised Muslim. This story, to me, sums up the method in a nutshell, especially the principal of respecting the other’s point of view.&lt;/p&gt;
+
+&lt;p&gt;It is all too easy to demonize the opponent. So often, though, when I find myself hating, later I realize that I am at war with some aspect of myself that I see in the opponent. So this important work, of trying to understand other points of view, ultimately leads to better integration with some of the exiled parts of my own psyche.&lt;/p&gt;
+
+&lt;p&gt;曾经我感到到自己憎恨对手的某一面，之后我发现恰恰是因为对手的这一面也存在于我自身之中。因此试着从不同的视觉看问题，最终将找回被驱逐的部分灵魂，使自己的灵魂完整。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</guid>
         
         
         <category>cs</category>
