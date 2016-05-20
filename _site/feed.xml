@@ -1,0 +1,1669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Monumentality</title>
+    <description></description>
+    <link>http://yourdomain.com/</link>
+    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 20 May 2016 11:55:45 +0800</pubDate>
+    <lastBuildDate>Fri, 20 May 2016 11:55:45 +0800</lastBuildDate>
+    <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>stupid scheduler</title>
+        <description>&lt;div id=&quot;table-of-contents&quot;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;div id=&quot;text-table-of-contents&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1&quot;&gt;1. 应用需求：&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-1&quot;&gt;1.1. 多租户平台必须满足的要求：&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-1-1&quot;&gt;1.1.1. Multi-tenancy:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-1-2&quot;&gt;1.1.2. From an administrator’s perspective, multi-tenancy requirements are to&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-1-3&quot;&gt;1.1.3. 从用户角度看&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-2&quot;&gt;1.2. 支持服务和大数据&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-2-1&quot;&gt;1.2.1. 服务：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-2-2&quot;&gt;1.2.2. 大数据：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2&quot;&gt;2. background: 现有的多租户环境下的资源调度算法&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3&quot;&gt;3. 动机&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4&quot;&gt;4. 基于竞价方式的资源调度&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-1&quot;&gt;4.1. 机制&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-2&quot;&gt;4.2. trade off&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-3&quot;&gt;4.3. 策略；&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-3-1&quot;&gt;4.3.1. 资源分类：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-3-2&quot;&gt;4.3.2. 提供的接口&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-5&quot;&gt;5. 理论证明：&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-5-1&quot;&gt;5.1. 之前的计算资源价值最大的证明方法不好，因为已经被市场理论所证明，没有必要再重述&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-5-2&quot;&gt;5.2. 使用需求和供给模型来简述系统的合理性，相关论文都不需要太多理论证明&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6&quot;&gt;6. bidscheduler实现&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-1&quot;&gt;6.1. 两级调度架构：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-2&quot;&gt;6.2. 提供的接口：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3&quot;&gt;6.3. 实现：&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-1&quot;&gt;6.3.1. 数据结构：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-2&quot;&gt;6.3.2. 数据初始化&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-3&quot;&gt;6.3.3. allocate方法：&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-4&quot;&gt;6.3.4. has&lt;sub&gt;reliable&lt;/sub&gt;&lt;sub&gt;resources&lt;/sub&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-5&quot;&gt;6.3.5. can&lt;sub&gt;preempt&lt;/sub&gt;&lt;sub&gt;reliable&lt;/sub&gt;&lt;sub&gt;resources&lt;/sub&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-6&quot;&gt;6.3.6. has&lt;sub&gt;restricted&lt;/sub&gt;&lt;sub&gt;resources&lt;/sub&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-7&quot;&gt;6.3.7. allocate&lt;sub&gt;task&lt;/sub&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-8&quot;&gt;6.3.8. allocate&lt;sub&gt;task&lt;/sub&gt;&lt;sub&gt;restricted&lt;/sub&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6-3-9&quot;&gt;6.3.9. bidscheduler.py&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7&quot;&gt;7. 待解决的问题：&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7-1&quot;&gt;7.1. 架构的重构&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7-2&quot;&gt;7.2. 性能问题，一秒能够处理多少调度请求&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7-3&quot;&gt;7.3. 分布式&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7-4&quot;&gt;7.4. 一致性，容错&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7-5&quot;&gt;7.5. 调度作业与调度workspace的不同：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8&quot;&gt;8. Background or Discussion&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1&quot;&gt;8.1. Dynamic Proportional Share Scheduling in Hadoop&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1-1&quot;&gt;8.1.1. Abstract&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1-2&quot;&gt;8.1.2. Introduction&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1-3&quot;&gt;8.1.3. Hadoop MapReduce:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1-4&quot;&gt;8.1.4. Design&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1-5&quot;&gt;8.1.5. evaluation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8-1-6&quot;&gt;8.1.6. discussion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;a-idsec-1-namesec-1a&quot;&gt;应用需求：&lt;a id=&quot;sec-1&quot; name=&quot;sec-1&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-1-1-namesec-1-1a&quot;&gt;多租户平台必须满足的要求：&lt;a id=&quot;sec-1-1&quot; name=&quot;sec-1-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;multi-tenancya-idsec-1-1-1-namesec-1-1-1a&quot;&gt;Multi-tenancy:&lt;a id=&quot;sec-1-1-1&quot; name=&quot;sec-1-1-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Multi-tenancy is the ability of a single instance of software to serve multiple tenants. A tenant is a group of users that have the same view of the system. Hadoop, as an enterprise data hub, naturally demands multi-tenancy. Creating different instances of Hadoop for various users or functions is not acceptable as it makes it harder to share data across departments and creates silos.
+多租户是使用某个软件的一个实例来服务多个租户。对系统拥有某一相同视图的一组用户是一个租户。通常租户可以是企业内部的部门或用户&lt;/p&gt;
+
+&lt;h3 id=&quot;from-an-administrators-perspective-multi-tenancy-requirements-are-toa-idsec-1-1-2-namesec-1-1-2a&quot;&gt;From an administrator’s perspective, multi-tenancy requirements are to&lt;a id=&quot;sec-1-1-2&quot; name=&quot;sec-1-1-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Ensure SLAs are met 满足每个用户的服务层协议
+Guarantee isolation 提供资源隔离
+Enforce quotas      约束每个用户的配额
+Establish security and delegation 确立安全和委派
+Ensure low cost operations and simpler manageability 低运维成本和简化管理&lt;/p&gt;
+
+&lt;h3 id=&quot;a-idsec-1-1-3-namesec-1-1-3a&quot;&gt;从用户角度看&lt;a id=&quot;sec-1-1-3&quot; name=&quot;sec-1-1-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;即满足用户的服务层协议&lt;/p&gt;
+
+&lt;h2 id=&quot;a-idsec-1-2-namesec-1-2a&quot;&gt;支持服务和大数据&lt;a id=&quot;sec-1-2&quot; name=&quot;sec-1-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;a-idsec-1-2-1-namesec-1-2-1a&quot;&gt;服务：&lt;a id=&quot;sec-1-2-1&quot; name=&quot;sec-1-2-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;web服务的sla非常严格，云计算提供商都声称其提供的计算资源，cpu，内存是隔离的
+web服务所需资源，下限由应用程序设计决定，随并发访问量线性增长，既需要预留资源，还需要能弹性伸缩&lt;/p&gt;
+
+&lt;h3 id=&quot;a-idsec-1-2-2-namesec-1-2-2a&quot;&gt;大数据：&lt;a id=&quot;sec-1-2-2&quot; name=&quot;sec-1-2-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;分布式应用，总的能够使用的资源上限由数据集大小决定，每个container的大小由应用程序的设计决定
+hadoop和yarn和mesos和kubernetes的做法都是：
+用户提交请求时，指定所需的每个container大小，需要多少个container&lt;/p&gt;
+
+&lt;h1 id=&quot;background-a-idsec-2-namesec-2a&quot;&gt;background: 现有的多租户环境下的资源调度算法&lt;a id=&quot;sec-2&quot; name=&quot;sec-2&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;yarn:优先级，队列，分层级的优先级列队，最小最大公平算法
+mesos：DRF 主要资源公平算法
+yarn对多租户的支持更多，mesos更侧重公平，缺少多租户支持&lt;/p&gt;
+
+&lt;h1 id=&quot;a-idsec-3-namesec-3a&quot;&gt;动机&lt;a id=&quot;sec-3&quot; name=&quot;sec-3&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;公平算法，所运行作业本身的价值不同；租户设定优先级，没有一个全知全能的管理员来设定优先级。
+基于自由市场的经济模型实现一个调度算法，依靠市场的资源配置功能实现计算资源的分配，使最高估价的作业最先得到资源。
+当运行在支持资源弹性伸缩的公有云，私有云，混合云环境下时，我们还可以利用需求量和价格，调整资源供给，以达到价格和资源的均衡。
+另外，通过把资源分为可靠资源和不可靠资源，cgroup动态调整资源配额的技术，在充分利用空闲资源，满足更多资源请求的同时，确保不中断正在运行的作业，只降低这些作业的性能。
+通过以上机制，此资源调度框实现了利用市场机制配置资源，计算资源需求和供给的均衡，并且提升了集群的资源利用率，满足更多的资源请求。&lt;/p&gt;
+
+&lt;h1 id=&quot;a-idsec-4-namesec-4a&quot;&gt;基于竞价方式的资源调度&lt;a id=&quot;sec-4&quot; name=&quot;sec-4&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-4-1-namesec-4-1a&quot;&gt;机制&lt;a id=&quot;sec-4-1&quot; name=&quot;sec-4-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;平台资源数量是有限的，发给每个租户虚拟币，租户使用虚拟币来对资源竞标，出价高者获得资源&lt;/p&gt;
+
+&lt;h2 id=&quot;trade-offa-idsec-4-2-namesec-4-2a&quot;&gt;trade off&lt;a id=&quot;sec-4-2&quot; name=&quot;sec-4-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;用户使用更复杂，用户需要权衡每个作业的重要性，选择为每个作业给出合适的竞价
+用户需要关注整个平台的竞价排名，确保自己的作业按照预期完成&lt;/p&gt;
+
+&lt;h2 id=&quot;a-idsec-4-3-namesec-4-3a&quot;&gt;策略；&lt;a id=&quot;sec-4-3&quot; name=&quot;sec-4-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;a-idsec-4-3-1-namesec-4-3-1a&quot;&gt;资源分类：&lt;a id=&quot;sec-4-3-1&quot; name=&quot;sec-4-3-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;可靠资源，受限制资源
+可靠资源和受限制资源都是通过cgroup的cpu和内存的上限控制
+受限制资源受cgroup的软限制控制，当系统资源不足的时候，优先释放受软限制的资源&lt;/p&gt;
+
+&lt;h3 id=&quot;a-idsec-4-3-2-namesec-4-3-2a&quot;&gt;提供的接口&lt;a id=&quot;sec-4-3-2&quot; name=&quot;sec-4-3-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;allocate(job&lt;sub&gt;allocation&lt;/sub&gt;&lt;sub&gt;request&lt;/sub&gt;)
+release(allocation)
+change&lt;sub&gt;bidprice&lt;/sub&gt;(allocation)&lt;/p&gt;
+
+&lt;h1 id=&quot;a-idsec-5-namesec-5a&quot;&gt;理论证明：&lt;a id=&quot;sec-5&quot; name=&quot;sec-5&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-5-1-namesec-5-1a&quot;&gt;之前的计算资源价值最大的证明方法不好，因为已经被市场理论所证明，没有必要再重述&lt;a id=&quot;sec-5-1&quot; name=&quot;sec-5-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;a-idsec-5-2-namesec-5-2a&quot;&gt;使用需求和供给模型来简述系统的合理性，相关论文都不需要太多理论证明&lt;a id=&quot;sec-5-2&quot; name=&quot;sec-5-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h1 id=&quot;bidschedulera-idsec-6-namesec-6a&quot;&gt;bidscheduler实现&lt;a id=&quot;sec-6&quot; name=&quot;sec-6&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-6-1-namesec-6-1a&quot;&gt;两级调度架构：&lt;a id=&quot;sec-6-1&quot; name=&quot;sec-6-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;bidscheduler作为一个通用的调度框架，应当采用资源调度和任务调度解耦合的架构。&lt;/p&gt;
+
+&lt;p&gt;由于bidscheduler考虑多租户，考虑作业价值的不同，不关注绝对公平，因此与yarn更类似，采用了类似yarn的两级调度架构。&lt;/p&gt;
+
+&lt;p&gt;bidscheduler作为 rasource manager， 之上可以运行多种application master, 我们的系统可以看做是一个 workspace master。之后将尝试，支持更多的计算框架，比如spark，比如崔嵬之前的跑作业的计算框架。&lt;/p&gt;
+
+&lt;p&gt;为了之后可以支持更多的计算框架，借鉴沿用了yarn的很多概念。&lt;/p&gt;
+
+&lt;p&gt;vclustermgr可看做是一个application master的实现。一个mapreduce job包含多个task, 类似于一个workspace包含多个容器。因此，还是沿用了yarn中的job和task的概念&lt;/p&gt;
+
+&lt;p&gt;存在一个问题：resource manager分给mapreducerMaster一个容器，就启动一个task，不需要等到所有容器都分配够了才启动执行；那么，一个workspace包含多个容器，是all or nothing 还是分开处理&lt;/p&gt;
+
+&lt;h2 id=&quot;a-idsec-6-2-namesec-6-2a&quot;&gt;提供的接口：&lt;a id=&quot;sec-6-2&quot; name=&quot;sec-6-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;allocate(jobAllocationRequest)
+release(allocationid)&lt;/p&gt;
+
+&lt;p&gt;vclustermgr中create&lt;sub&gt;cluster函数调用allocation&lt;/sub&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# call bidscheduler.allocate, get resources
+jobAllocationRequest = {
+    jobid: clusterid,
+    userid: json.loads(user_info)[&quot;userid&quot;],
+    tasks: clustersize,
+    resourcesPerTask: containersize,
+    bidprice: bidprice
+}
+import bidscheduler
+job_allocations = bidscheduler.allocate(jobAllocationRequest)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;vclustermgr中调用release&lt;sub&gt;allocation&lt;/sub&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;a-idsec-6-3-namesec-6-3a&quot;&gt;实现：&lt;a id=&quot;sec-6-3&quot; name=&quot;sec-6-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;a-idsec-6-3-1-namesec-6-3-1a&quot;&gt;数据结构：&lt;a id=&quot;sec-6-3-1&quot; name=&quot;sec-6-3-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;把分配出去的资源分为两类：
+可靠资源，即受到隔离保护的资源，使用cgroup的cpu和memeory保护
+受限制资源：使用cgroup的软限制分配的资源，当系统cpu或者内存不足时，将会减少这些容器的资源&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;class AllocationOfTask(object):
+    __slots__ = &#39;uuid&#39;,&#39;userid&#39;,&#39;jobid&#39;,&#39;taskid&#39;,&#39;resources&#39;,&#39;bidprice&#39;,&#39;type&#39;
+
+class AllocationOfMachine(object):
+    __slots__ = &#39;machineid&#39;,&quot;resources&quot;,&quot;reliable_resources_allocation_summary&quot;,
+                &#39;reliable_allocation&#39;,&#39;curr_usage&#39;, &#39;restricted_allocation&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;在httprest的main函数中调用以下init方法：&lt;/p&gt;
+
+&lt;h3 id=&quot;a-idsec-6-3-2-namesec-6-3-2a&quot;&gt;数据初始化&lt;a id=&quot;sec-6-3-2&quot; name=&quot;sec-6-3-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;allocations = {}
+nodemanager
+def init_allocations():
+    global allocations
+    global nodemanager
+    machines = nodemanager.get_allnodes()
+    for machine in machines:
+        allocation = AllocationOfMachine()
+        allocation.machineid = machine
+        allocation.resources = 100
+        allocation.reliable_resources_allocation_summary = 0
+        allocation.reliable_allocation = []
+        allocation.restricted_allocation = []
+
+        allocations[machine] = allocation
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;allocatea-idsec-6-3-3-namesec-6-3-3a&quot;&gt;allocate方法：&lt;a id=&quot;sec-6-3-3&quot; name=&quot;sec-6-3-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;接受job的调度请求，为job中包含的每一个task分配资源，然后把所有的资源打包返回：
+选择可靠资源剩余最多的机器，检查是否可以分配可靠资源，如果可以即分配
+否则，选择使用率最低的机器，分配受限制资源&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def allocate(job_allocation_request):
+    global allocations
+    job_allocation_response = []
+    sorted(allocations,lambda x: x.reliable_resources_allocation_summary )
+
+    # 先从可靠资源最多的机器分配资源
+    for i in range(job_allocation_request[&#39;tasks_count&#39;]):
+        task_allocation_request = {
+            userid: job_allocation_request[&#39;userid&#39;],
+            jobid: job_allocation_request[&#39;jobid&#39;],
+            taskid: i,
+            bidprice: job_allocation_request[&#39;bidprice&#39;],
+            resources: job_allocation_request[&#39;resources&#39;],
+        }
+        if( has_reliable_resource(allocations[i],task_allocation_request)
+            or can_preempt_reliable_resources(allocations[i],task_allocation_request)):
+            task_allocation_response = allocate_task(task_allocation_request)
+            job_allocation_response.add(task_allocation_response)
+        else:
+            break
+
+    if (job_allocation_response.size == job_allocation_request[&#39;taskcount&#39;]):
+        return job_allocation_response
+    else:
+        # 选择使用率最低的机器，分配restricted_resources
+        global usage_per_machine
+        sorted(usage_per_machine, lambda x: x.cpu_utilization, reverse=True)
+        for i in range(job_allocation_response.size..job_allocation_request[&#39;taskcount&#39;]):
+            machineid = usage_per_machine[i][&#39;machineid&#39;]
+            allocation_of_machine = allocations[machineid]
+            task_allocation_request = {
+                userid: job_allocation_request[&#39;userid&#39;],
+                jobid: job_allocation_request[&#39;jobid&#39;],
+                taskid: i,
+                bidprice: job_allocation_request[&#39;bidprice&#39;],
+                resources: job_allocation_request[&#39;resources&#39;]
+            }
+            task_allocation_response = allocate_restricted(allocation_of_machine,task_allocation_request)
+            job_allocation_response.add(task_allocation_response)
+
+    return job_allocation_response
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;hassubreliablesubsubresourcessuba-idsec-6-3-4-namesec-6-3-4a&quot;&gt;has&lt;sub&gt;reliable&lt;/sub&gt;&lt;sub&gt;resources&lt;/sub&gt;&lt;a id=&quot;sec-6-3-4&quot; name=&quot;sec-6-3-4&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def has_reliable_resources(allocation_of_machine,task_allocation_request):
+    if(task_allocation_request[&#39;resource&#39;]
+       +allocation_of_machine.reliable_resources_allocation_summary
+       &amp;lt; allocation_of_machine.resources):
+        return True
+    else:
+        return False
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;cansubpreemptsubsubreliablesubsubresourcessuba-idsec-6-3-5-namesec-6-3-5a&quot;&gt;can&lt;sub&gt;preempt&lt;/sub&gt;&lt;sub&gt;reliable&lt;/sub&gt;&lt;sub&gt;resources&lt;/sub&gt;&lt;a id=&quot;sec-6-3-5&quot; name=&quot;sec-6-3-5&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def can_preempt_reliable_resources(taskAllocationRequest):
+    to_be_preempted=0
+    for a in reliable_allocation:
+        if (a.bidprice&amp;lt; task_allocation_request[&#39;bidprice&#39;]):
+            to_be_preempted += a.bidprice
+            if to_be_preempted &amp;gt; task_allocation_request[&#39;resource&#39;]:
+                return True
+        else:
+            break
+        return False
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;hassubrestrictedsubsubresourcessuba-idsec-6-3-6-namesec-6-3-6a&quot;&gt;has&lt;sub&gt;restricted&lt;/sub&gt;&lt;sub&gt;resources&lt;/sub&gt;&lt;a id=&quot;sec-6-3-6&quot; name=&quot;sec-6-3-6&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def has_restricted_resources(allocation_of_machine,task_allocation_request):
+    if(task_allocation_request[&#39;resources&#39;]
+       + curr_usage
+       &amp;lt; allocation_of_machine.resources * 0.8):
+        return True
+    else:
+        return False
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;allocatesubtasksuba-idsec-6-3-7-namesec-6-3-7a&quot;&gt;allocate&lt;sub&gt;task&lt;/sub&gt;&lt;a id=&quot;sec-6-3-7&quot; name=&quot;sec-6-3-7&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import uuid, bisect
+def allocate_task(allocation_of_machine,task_allocation_request):
+    if(has_reliable_resources(request)):
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;reliable&#39;
+        bisect.insort(allocation_of_machine.reliable_allocation, allocation_of_task, lambda x: x.bidprice)
+        return {status:success, allocation:allocation_of_task}
+
+    if(can_preempt_reliable_resources(task_allocation_request)):
+        can_preempt = 0
+        can_preempt_count = 0
+        # 把被抢占的可靠资源变成受限制资源
+        for i,a in reliableAllocation:
+            can_preempt+=a[&#39;slots&#39;]
+            can_preempt_count+=1
+            a.type = &#39;restricted&#39;
+            import bisect
+            bisect.insort(allocation_of_machine.restricted_allocation,a, lambda x: x.bidprice)
+            # to-do 调整这些容器的cgroup设置，使用软限制模式，只能使用空闲资源
+
+            if can_preempt&amp;gt;=task_allocation_request[&#39;resources&#39;]:
+                break
+            # 把被抢占的可靠资源从reliable_allocation中删除
+        del reliable_allocations[0..can_preempt_count]
+
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;reliable&#39;
+        bisect.insort(allocation_of_machine.reliable_allocation,AllocationOfTask)
+        return {status:success, allocation:allocation}
+
+    if(has_restricted_resources(task_allocation_request)):
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;restricted&#39;
+        bisect.insort(allocation_of_machine.restricted_allocation,AllocationOfTask)
+        return {status:&#39;success&#39;, allocation:allocation_of_task}
+
+    else:
+        return {status: &#39;failed&#39;}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;allocatesubtasksubsubrestrictedsuba-idsec-6-3-8-namesec-6-3-8a&quot;&gt;allocate&lt;sub&gt;task&lt;/sub&gt;&lt;sub&gt;restricted&lt;/sub&gt;&lt;a id=&quot;sec-6-3-8&quot; name=&quot;sec-6-3-8&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def allocate_task_restricted(allocation_of_machine,task_allocation_request):
+    if(has_restricted_resources(task_allocation_request)):
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;restricted&#39;
+        bisect.insort(allocation_of_machine.restricted_allocation,AllocationOfTask)
+        return {status:&#39;success&#39;, allocation:allocation_of_task}
+
+    else:
+        return {status: &#39;failed&#39;}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;bidschedulerpya-idsec-6-3-9-namesec-6-3-9a&quot;&gt;bidscheduler.py&lt;a id=&quot;sec-6-3-9&quot; name=&quot;sec-6-3-9&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;依赖的库&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from monitor import summary_resources, summary_usage, curr_usage
+from monitor import summary_usage_per_user, summary_usage_per_user
+from monitor import curr_usage_per_machine
+import nodemgr
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;bidscheduler.py&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;from monitor import summary_resources, summary_usage, curr_usage
+from monitor import summary_usage_per_user, summary_usage_per_user
+from monitor import curr_usage_per_machine
+import nodemgr
+    
+class AllocationOfTask(object):
+    __slots__ = &#39;uuid&#39;,&#39;userid&#39;,&#39;jobid&#39;,&#39;taskid&#39;,&#39;resources&#39;,&#39;bidprice&#39;,&#39;type&#39;
+    
+class AllocationOfMachine(object):
+    __slots__ = &#39;machineid&#39;,&quot;resources&quot;,&quot;reliable_resources_allocation_summary&quot;,
+                &#39;reliable_allocation&#39;,&#39;curr_usage&#39;, &#39;restricted_allocation&#39;
+    
+allocations = {}
+nodemanager
+def init_allocations():
+    global allocations
+    global nodemanager
+    machines = nodemanager.get_allnodes()
+    for machine in machines:
+        allocation = AllocationOfMachine()
+        allocation.machineid = machine
+        allocation.resources = 100
+        allocation.reliable_resources_allocation_summary = 0
+        allocation.reliable_allocation = []
+        allocation.restricted_allocation = []
+    
+        allocations[machine] = allocation
+    
+def has_reliable_resources(allocation_of_machine,task_allocation_request):
+    if(task_allocation_request[&#39;resource&#39;]
+       +allocation_of_machine.reliable_resources_allocation_summary
+       &amp;lt; allocation_of_machine.resources):
+        return True
+    else:
+        return False
+    
+def can_preempt_reliable_resources(taskAllocationRequest):
+    to_be_preempted=0
+    for a in reliable_allocation:
+        if (a.bidprice&amp;lt; task_allocation_request[&#39;bidprice&#39;]):
+            to_be_preempted += a.bidprice
+            if to_be_preempted &amp;gt; task_allocation_request[&#39;resource&#39;]:
+                return True
+        else:
+            break
+        return False
+    
+def has_restricted_resources(allocation_of_machine,task_allocation_request):
+    if(task_allocation_request[&#39;resources&#39;]
+       + curr_usage
+       &amp;lt; allocation_of_machine.resources * 0.8):
+        return True
+    else:
+        return False
+    
+import uuid, bisect
+def allocate_task(allocation_of_machine,task_allocation_request):
+    if(has_reliable_resources(request)):
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;reliable&#39;
+        bisect.insort(allocation_of_machine.reliable_allocation, allocation_of_task, lambda x: x.bidprice)
+        return {status:success, allocation:allocation_of_task}
+    
+    if(can_preempt_reliable_resources(task_allocation_request)):
+        can_preempt = 0
+        can_preempt_count = 0
+        # 把被抢占的可靠资源变成受限制资源
+        for i,a in reliableAllocation:
+            can_preempt+=a[&#39;slots&#39;]
+            can_preempt_count+=1
+            a.type = &#39;restricted&#39;
+            import bisect
+            bisect.insort(allocation_of_machine.restricted_allocation,a, lambda x: x.bidprice)
+            # to-do 调整这些容器的cgroup设置，使用软限制模式，只能使用空闲资源
+    
+            if can_preempt&amp;gt;=task_allocation_request[&#39;resources&#39;]:
+                break
+            # 把被抢占的可靠资源从reliable_allocation中删除
+        del reliable_allocations[0..can_preempt_count]
+    
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;reliable&#39;
+        bisect.insort(allocation_of_machine.reliable_allocation,AllocationOfTask)
+        return {status:success, allocation:allocation}
+    
+    if(has_restricted_resources(task_allocation_request)):
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;restricted&#39;
+        bisect.insort(allocation_of_machine.restricted_allocation,AllocationOfTask)
+        return {status:&#39;success&#39;, allocation:allocation_of_task}
+    
+    else:
+        return {status: &#39;failed&#39;}
+    
+def allocate_task_restricted(allocation_of_machine,task_allocation_request):
+    if(has_restricted_resources(task_allocation_request)):
+        allocation_of_task = AllocationOfTask()
+        allocation_of_task.id = uuid.uuid4()
+        allocation_of_task.userid = task_allocation_request[&#39;userid&#39;]
+        allocation_of_task.jobid = task_allocation_request[&#39;jobid&#39;]
+        allocation_of_task.taskid = task_allocation_request[&#39;taskid&#39;]
+        allocation_of_task.bidprice = task_allocation_request[&#39;bidprice&#39;]
+        allocation_of_task.type = &#39;restricted&#39;
+        bisect.insort(allocation_of_machine.restricted_allocation,AllocationOfTask)
+        return {status:&#39;success&#39;, allocation:allocation_of_task}
+    
+    else:
+        return {status: &#39;failed&#39;}
+    
+def allocate(job_allocation_request):
+    global allocations
+    job_allocation_response = []
+    sorted(allocations,lambda x: x.reliable_resources_allocation_summary )
+    
+    # 先从可靠资源最多的机器分配资源
+    for i in range(job_allocation_request[&#39;tasks_count&#39;]):
+        task_allocation_request = {
+            userid: job_allocation_request[&#39;userid&#39;],
+            jobid: job_allocation_request[&#39;jobid&#39;],
+            taskid: i,
+            bidprice: job_allocation_request[&#39;bidprice&#39;],
+            resources: job_allocation_request[&#39;resources&#39;],
+        }
+        if( has_reliable_resource(allocations[i],task_allocation_request)
+            or can_preempt_reliable_resources(allocations[i],task_allocation_request)):
+            task_allocation_response = allocate_task(task_allocation_request)
+            job_allocation_response.add(task_allocation_response)
+        else:
+            break
+    
+    if (job_allocation_response.size == job_allocation_request[&#39;taskcount&#39;]):
+        return job_allocation_response
+    else:
+        # 选择使用率最低的机器，分配restricted_resources
+        global usage_per_machine
+        sorted(usage_per_machine, lambda x: x.cpu_utilization, reverse=True)
+        for i in range(job_allocation_response.size..job_allocation_request[&#39;taskcount&#39;]):
+            machineid = usage_per_machine[i][&#39;machineid&#39;]
+            allocation_of_machine = allocations[machineid]
+            task_allocation_request = {
+                userid: job_allocation_request[&#39;userid&#39;],
+                jobid: job_allocation_request[&#39;jobid&#39;],
+                taskid: i,
+                bidprice: job_allocation_request[&#39;bidprice&#39;],
+                resources: job_allocation_request[&#39;resources&#39;]
+            }
+            task_allocation_response = allocate_restricted(allocation_of_machine,task_allocation_request)
+            job_allocation_response.add(task_allocation_response)
+    
+    return job_allocation_response
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;a-idsec-7-namesec-7a&quot;&gt;待解决的问题：&lt;a id=&quot;sec-7&quot; name=&quot;sec-7&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-7-1-namesec-7-1a&quot;&gt;架构的重构&lt;a id=&quot;sec-7-1&quot; name=&quot;sec-7-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;重构成一个独立的调度框架，包括resourcemanager和nodemanager两个独立的进程&lt;/p&gt;
+
+&lt;h2 id=&quot;a-idsec-7-2-namesec-7-2a&quot;&gt;性能问题，一秒能够处理多少调度请求&lt;a id=&quot;sec-7-2&quot; name=&quot;sec-7-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;a-idsec-7-3-namesec-7-3a&quot;&gt;分布式&lt;a id=&quot;sec-7-3&quot; name=&quot;sec-7-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;为了提高每秒处理的调度请求，未来将重构为分布式设计，多个resourcemanager协同工作&lt;/p&gt;
+
+&lt;h2 id=&quot;a-idsec-7-4-namesec-7-4a&quot;&gt;一致性，容错&lt;a id=&quot;sec-7-4&quot; name=&quot;sec-7-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;还是需要保存在etcd中
+最佳方案是，高可靠的内存数据库&lt;/p&gt;
+
+&lt;h2 id=&quot;workspacea-idsec-7-5-namesec-7-5a&quot;&gt;调度作业与调度workspace的不同：&lt;a id=&quot;sec-7-5&quot; name=&quot;sec-7-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;作业可以排队
+创建workspace的请求立即得到回应，为了用户的交互体验，不能排队
+之后再考虑是否需要队列&lt;/p&gt;
+
+&lt;h1 id=&quot;background-or-discussiona-idsec-8-namesec-8a&quot;&gt;Background or Discussion&lt;a id=&quot;sec-8&quot; name=&quot;sec-8&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;dynamic-proportional-share-scheduling-in-hadoopa-idsec-8-1-namesec-8-1a&quot;&gt;Dynamic Proportional Share Scheduling in Hadoop&lt;a id=&quot;sec-8-1&quot; name=&quot;sec-8-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;abstracta-idsec-8-1-1-namesec-8-1-1a&quot;&gt;Abstract&lt;a id=&quot;sec-8-1-1&quot; name=&quot;sec-8-1-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;It allows users to control their allocated capacity by adjusting their spending over time.&lt;/p&gt;
+
+&lt;p&gt;This simple mechanism allows the scheduler to make more efficient decisions about which jobs and users to prioritize and gives users the tool to optimize and customize their allocations to fit the importance and requirements of their jobs.&lt;/p&gt;
+
+&lt;p&gt;We envision our scheduler to be used by deadline or budget optimizing agents on behalf of users.&lt;/p&gt;
+
+&lt;p&gt;We show that our scheduler enforces service levels more accurately and also scales to more users with distinct service levels than existing schedulers.&lt;/p&gt;
+
+&lt;h3 id=&quot;introductiona-idsec-8-1-2-namesec-8-1-2a&quot;&gt;Introduction&lt;a id=&quot;sec-8-1-2&quot; name=&quot;sec-8-1-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;we have developed the Dynamic Priority (DP) scheduler, a novel scheduler that extends the existing FIFO and fair-share schedulers in Hadoop.&lt;/p&gt;
+
+&lt;p&gt;这个跟我们的一样，作为hadoop已有的调度框架的一个插件，利用hadoop已经实现的很多接口和方法。&lt;/p&gt;
+
+&lt;p&gt;This scheduler plug-in allows users to purchase and bid for capacity or quality of service levels dynamically. This simple mechanism allows the scheduler to make more efficient decisions about which jobs and users to prioritize and gives users the tool to optimize and customize their allocations to fit the importance and requirements of their jobs.&lt;/p&gt;
+
+&lt;p&gt;这一点跟我们完全一样&lt;/p&gt;
+
+&lt;p&gt;it gives users the incentive to scale back their jobs when demand is high, since the cost of running on a slot is then also more expensive.&lt;/p&gt;
+
+&lt;p&gt;这一点并不重要&lt;/p&gt;
+
+&lt;p&gt;The capacity allotted, represented by Map and Reduce task slots, is proportional to the spending rate a user is willing to pay for a slot and inversely proportional to the aggregate spending rate of all existing users.&lt;/p&gt;
+
+&lt;p&gt;主要不同！他并不是完全的基于用户出价来抢占资源的，而是按照用户出价占总报价的比例来分配资源。而我们的策略是：出价最高的用户可以得到他需要的所有资源。按比例分配并不能使真正重要的任务获得优先执行！不符合经济规律。&lt;/p&gt;
+
+&lt;h3 id=&quot;hadoop-mapreducea-idsec-8-1-3-namesec-8-1-3a&quot;&gt;Hadoop MapReduce:&lt;a id=&quot;sec-8-1-3&quot; name=&quot;sec-8-1-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;review the current hadoop schedulers&lt;/p&gt;
+
+&lt;h3 id=&quot;designa-idsec-8-1-4-namesec-8-1-4a&quot;&gt;Design&lt;a id=&quot;sec-8-1-4&quot; name=&quot;sec-8-1-4&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;The primary design goal of our Hadoop task scheduler is to allow capacity distribution across concurrent users to change dynamically based on user preferences.&lt;/p&gt;
+
+&lt;p&gt;Traditional priority systems that try to guess user priority are too inaccurate , and unregulated user priorities assume trusted small groups of users.&lt;/p&gt;
+
+&lt;p&gt;Our scheduler automates capacity allocation and redistribution in a regulated task slot resource market.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Mechanism&lt;/p&gt;
+
+    &lt;p&gt;The core of our design is a proportional share resource allocation mechanism that allows users to purchase or be granted a queue priority budget.&lt;/p&gt;
+
+    &lt;p&gt;This budget may be used to set spending rates denoting the willingness to pay a certain amount of the budget per Hadoop map or reduce task slot per time unit.&lt;/p&gt;
+
+    &lt;p&gt;The time unit is configurable, and referred to as allocation interval. It is typically set to somewhere between 10 seconds and 1 minute.&lt;/p&gt;
+
+    &lt;p&gt;In each allocation interval the scheduler:&lt;/p&gt;
+
+    &lt;p&gt;—aggregates all spending rates s from all current users to calculate the Hadoop cluster price, p,&lt;/p&gt;
+
+    &lt;p&gt;—for all users, allocates (si/p) × c task slots (both mappers and reducers) to user i, where si, is the spending rate of user i, and c is the aggregate slot capacity of the cluster&lt;/p&gt;
+
+    &lt;p&gt;—for all users, deducts si × ui from budget b where ui, is the number of slots used by user i&lt;/p&gt;
+
+    &lt;p&gt;用户管理员可根据集群资源总量为每个用户分配一定的预算。用户可根据自己的需要动态调整自己的消费率，即每个时间单元内单个slot的价钱。在每个时间单元内，调度器按照以下步骤计算每个用户获得的资源量：&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;计算所有用户的消费率之和p&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;对于每个用户分配i，分配si/p*c 的资源量，si是用户i的消费率，c为hadoop集群中资源总数&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;对于每个用户i，从其预算中扣除si * ui，ui为用户正使用的slot数目&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+
+    &lt;p&gt;The key feature of this mechanism is that it discourages free-riding and gaming by users.&lt;/p&gt;
+
+    &lt;p&gt;恰好相反，我们想要创造一个自由市场，鼓励博弈。为什么本文作者专门消除这些行为？&lt;/p&gt;
+
+    &lt;p&gt;The disadvantage is less capacity predictability and more variation in capacity allocated to an application.&lt;/p&gt;
+
+    &lt;p&gt;This introduces the difficulty of making spending rate decisions to meet the SLA and deadline requirements.&lt;/p&gt;
+
+    &lt;p&gt;Possible starvation of low-priority (low-spending) tasks can be mitigated by using the standard approach in Hadoop of limiting the time each task is allowed to run on a node.&lt;/p&gt;
+
+    &lt;p&gt;即使是低优先级的任务仍然不会被饿死。没有必要！&lt;/p&gt;
+
+    &lt;p&gt;We note that the Dynamic Priority scheduler can easily be configured to mimic the behavior of the other schedulers. If no queues or users have any credits left the scheduler reduces to a FIFO scheduler. If all queues are configured with the same share (spending rate in our case) and the allocation interval is set to a very large value, the scheduler reduces to the behavior of the static fair-share schedulers.&lt;/p&gt;
+
+    &lt;p&gt;可以退化为FIFO 和Fair Share scheduler&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;implementation&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;evaluationa-idsec-8-1-5-namesec-8-1-5a&quot;&gt;evaluation&lt;a id=&quot;sec-8-1-5&quot; name=&quot;sec-8-1-5&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;In the first set, we examine the correlation of spending rates, budgets and performance metrics.&lt;/p&gt;
+
+&lt;p&gt;In the second set, we study how accurately and effectively service levels can be supported.&lt;/p&gt;
+
+&lt;h3 id=&quot;discussiona-idsec-8-1-6-namesec-8-1-6a&quot;&gt;discussion&lt;a id=&quot;sec-8-1-6&quot; name=&quot;sec-8-1-6&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Our scheduling approach is closely related to and inspired by economic schedulers,whereby you bid for resources on a market and receive allocations based on various auction mechanisms [18,19,20,17,21,22,23,24].We do not preclude nor require that our scheduler budgets are tied to a real currency. Furthermore, we do not assume that there are competing users who should be given different shares of the resources.&lt;/p&gt;
+
+&lt;p&gt;动态优先级调度受到经济学调度器的启发并且和他们很接近，都是用户在一个市场上基于各种各样的拍卖机制竞标资源。动态优先调度器不排除也不阻止用户的预算跟一种虚拟货币或者真实货币绑定。（编者注：其实不能同真实或者虚拟货币挂钩，因为不是自由市场）。&lt;/p&gt;
+
+&lt;p&gt;18-24这些论文都是05年以前，还没有hadoop和大数据的时代，主要面向网格计算和HPC。调研一下是否算是与它们重复。&lt;/p&gt;
+
+&lt;p&gt;应用了经济模型的调度器一定会引用这篇论文，因此我调研了所有160篇引用这篇论文的其他论文，暂时还没有发现跟我们重复的方案，有十几篇论文可能与我们有关联，可能需要引用，之后再读。&lt;/p&gt;
+
+&lt;div id=&quot;footnotes&quot;&gt;
+&lt;h2 class=&quot;footnotes&quot;&gt;Footnotes: &lt;/h2&gt;
+&lt;div id=&quot;text-footnotes&quot;&gt;
+
+&lt;div class=&quot;footdef&quot;&gt;&lt;sup&gt;&lt;a id=&quot;fn.1&quot; name=&quot;fn.1&quot; class=&quot;footnum&quot; href=&quot;#fnr.1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; &lt;p&gt;DEFINITION NOT FOUND.&lt;/p&gt;&lt;/div&gt;
+
+
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Thu, 19 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/05/19/stupid_scheduler.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/19/stupid_scheduler.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+      <item>
+        <title>Two concepts of social structure</title>
+        <description>&lt;p&gt;It seems to me that there are two very different common schools of thought on how organizations are structured. They have been competing for at least ten thousand years, since the agrarian movement started getting into conflict with the hunter-gatherers.&lt;/p&gt;
+
+&lt;p&gt;In American culture today, the hierarchical theory of organizations is so deeply ingrained that many people are completely unaware of it. This theory represents social structures as pyramids, with the serfs on the bottom and various layers of leaders leading up to the supreme commander on the top. Examples are the Catholic Church and the armed forces.&lt;/p&gt;
+
+&lt;p&gt;Two of the assumptions in this model bother me:&lt;/p&gt;
+
+&lt;p&gt;That the people above are smarter than the ones below and they know better what is going on;
+That watching over other people is a more important activity than producing actual goods and services.
+In Illuminatus!, a satirical study of social pathologies, Robert Anton Wilson and Robert Shea brought out an important principal that causes trouble in hierarchies: the Snafu Principle. People tend to say what they think the boss wants to hear, especially if they have noticed that the practice of ``shooting the messenger’’ is common. This means that the information passed up the pyramid is distorted at each level. Thus, each higher layer of managers tends to have less and less contact with reality, and near the top they are often completely out of touch.&lt;/p&gt;
+
+&lt;p&gt;The other model might be called the network model. People are connected, but not in pyramids. There is no ``alpha male’’ at the top of the heap; there is not even any concept of higher and lower. Power is distributed much more evenly.&lt;/p&gt;
+
+&lt;p&gt;The best practical book I’ve seen on alternatives to hierarchies is Stewardship by Peter Block (Berrett-Kohler, 1993, ISBN 1-881052-28-1). This inspiring book gives a complete plan for building organizations that work. Block is not a dreamer; his principles were derived from real corporate war stories, and are being applied in highly competitive businesses with good results. His goal is to make our economy efficient and competitive. The results look equally promising for application to public organizations such as schools and regulatory agencies. The preface to this book makes an important point: why is it that in our supposedly democratic society, our workplaces are so often dictatorships?&lt;/p&gt;
+
+&lt;p&gt;Further up the organization by Robert Townsend (Harper &amp;amp; Row, 1984, ISBN 0-06-097136-3) is an older work by a famous hell-raiser and CEO that seems to presage Block’s work in Stewardship. Another vote for redesigning the way our organizations work.&lt;/p&gt;
+
+&lt;p&gt;In the book In the absence of the sacred: the failure of technology and the survival of the Indian nations, Jerry Mander gives a deeply insightful history of the long-running conflict between the two world-views. His message is disturbing: the hierarchical culture is not indefinitely sustainable.&lt;/p&gt;
+
+&lt;p&gt;So how do we change institutions that aren’t working? I think Gandhi had some pretty good ideas.&lt;/p&gt;
+
+&lt;p&gt;Practicing problem-solvers who are frustrated because some of their best work has been spoiled by organizational pathologies should read the work of William L. Livingston, especially Have Fun at Work.&lt;/p&gt;
+
+&lt;p&gt;Accidental Empires, by Robert X. Cringely (Harper Business, 1992, ISBN 0-88730-621-7), Hackers by Steven Levy (Dell, 1984, ISBN 0-440-13405-6), and The Soul of a New Machine by Tracy Kidder (Little, Brown, 1981, ISBN 0316491705) are good depictions of life in the world of Real Programmers that ring true based on my own experience. These books also have good insights into the strange world of startups: why they succeed or fail, and what happens to the people who propel them. Although Kidder’s book sounds very upbeat, De Marco notes in Peopleware (see `Readings in human factors’) that almost everyone left the company shortly after the period described in the book.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+      <item>
+        <title>The Noel Smith-Wenkle Salary Negotiation Method</title>
+        <description>&lt;p&gt;Salary negotiation is something at which hiring managers are usually a lot more proficient than the people they hire. In the interest of leveling the playing field, here is a method for salary negotiation that has worked for me and many others.&lt;/p&gt;
+
+&lt;p&gt;Noel Smith-Wenkle is a headhunter, and he taught me this method in about 1982. Headhunters’ fees are proportional to the salary that their clients get, so it is in their interest to get as much as possible.&lt;/p&gt;
+
+&lt;p&gt;Disclaimer: This method was tuned for the hiring climate for sought-after software developers in Silicon Valley in the early 80s, so it may not work for any given situation. However, I think the principles have general applicability. Your mileage may vary.&lt;/p&gt;
+
+&lt;p&gt;Fundamentals&lt;/p&gt;
+
+&lt;p&gt;Salaries depend mainly on two things: the work and the geographical area. Most companies share salary data with each other: the typical big-company personnel department will have detailed breakdowns on the distribution of salaries for their types of work and locales. So they will generally know within a pretty narrow range what your job is worth.&lt;/p&gt;
+
+&lt;p&gt;To save labor costs, almost all companies play a nasty little game. They ask you how much you want. Sometimes there’s a slot on your application named something innocent like “desired salary range.” Most people automatically fill in all blanks on a form, so they’ll put down a figure.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, many people underestimate their worth, so they’ll put down a low figure, less than the company was prepared to pay. It’s a rare company who will offer you what you’re worth in this situation. Some companies will even bargain down your already undervalued amount.&lt;/p&gt;
+
+&lt;p&gt;You’re happy because you got what you asked for (or nearly so), and they’re happy because they’re underpaying you and you’re not likely to realize it.&lt;/p&gt;
+
+&lt;p&gt;So, the bottom line is: Don’t tell them how much you’ll take.&lt;/p&gt;
+
+&lt;p&gt;Before you begin negotiating, you must have a minimum salary figure in mind. If at all possible, you should talk to several people who are doing similar work in an area with similar living costs. Watch out! People from rural New Mexico, for example, have no idea how ungodly expensive it is to live in the Bay Area or Boston.&lt;/p&gt;
+
+&lt;p&gt;Remember the bottom line, though: have a minimum figure in your head, but don’t tell them.&lt;/p&gt;
+
+&lt;p&gt;The purpose of the method is to get the company to be the first party to name a number. If it’s above your minimum, you accept. If it’s too low, you tell them it’s too low, but you do not say by how much. They will either break off negotiations or come back with a higher offer. Your only responses are either “okay” or “higher”, never “X amount higher.”&lt;/p&gt;
+
+&lt;p&gt;The method in action&lt;/p&gt;
+
+&lt;p&gt;If they try to get you to name a figure on the application, leave it blank. You want them to ask for a number verbally.&lt;/p&gt;
+
+&lt;p&gt;Step 1. The first time they ask you how much you’ll take, reply:&lt;/p&gt;
+
+&lt;p&gt;I am much more interested in doing (type of work) here at (name of company) than I am in the size of the initial offer.&lt;/p&gt;
+
+&lt;p&gt;This sentence is constructed with great care. You may want to memorize it. It does several things for you. It’s great public relations. The vast majority of people answer their question with a number. Because you have focused on the job and not on the compensation, you have instantly distinguished yourself from the thundering herd. You have also dodged their question.
+Noel said that about 40% of the time this is all you need, and the hiring manager will go off and look up your numbers and make you a fair offer. However, over half the time, they will ask you again.&lt;/p&gt;
+
+&lt;p&gt;Step 2. The second time they ask, reply:&lt;/p&gt;
+
+&lt;p&gt;I will consider any reasonable offer.&lt;/p&gt;
+
+&lt;p&gt;This is basically a stalling tactic. The word ‘consider’ has a lot of leeway in it. Add to this the large amount of slop in the word ‘reasonable’, and obviously the sentence has no meaning at all. But you’ve been polite, and once more you’ve refused to name the first figure.
+Noel said that in only about 30% of the cases was it necessary to go to step 3.&lt;/p&gt;
+
+&lt;p&gt;Step 3.&lt;/p&gt;
+
+&lt;p&gt;You are in a much better position to know how much I’m worth to you than I am.&lt;/p&gt;
+
+&lt;p&gt;Once again, you have been polite, and again you have refused to name a number. You have also told them, in so many words, that you are onto their little game. If they ask a fourth or even a fifth time how much you’ll take (Noel said it rarely happens), repeat step 3.&lt;/p&gt;
+
+&lt;p&gt;我读过的最好的如何谈薪水的文章，不过实际应用还有一些因素要考虑：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;使用这样的策略将会塑造你的个人形象：公司会认为应聘者是一个主动进取，敢于冒险的人。如果你对这样的个人形象感到不适，不要尝试&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;如果是独立的人力资源来面试你，不必过分担心自己的个人形象；如果是未来的上司来谈薪水，要注意保持个人形象的统一性&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;某些企业文化不喜欢有冒险精神，独立思考，有进取心的员工，不要采取这种策略。比如华为？某些创业公司非常看重进取精神，应当果断使用&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;观察猜测HR的性格：有些人不能接受应聘者占据主动权，有些人是感性型大过理性型。面对这两种人需要采用完全相反的策略&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;核心原则是：尽最大努力让对方先说一个数字，这表示公司更需要你，而不是你更需要这份工作。这将会后续具体谈判打下一个坚固的基础&lt;/p&gt;
+</description>
+        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</guid>
+        
+        
+        <category>research</category>
+        
+      </item>
+    
+      <item>
+        <title>Gandhi: an approach to nonviolent social change</title>
+        <description>&lt;p&gt;The book ``Conquest of Violence’’ by Joan V. Bondurant (University of California Press, 1965, ISBN 0-520-00145-1) is an excellent summary of both the why and the how of satyagraha, Gandhi’s science of social change.&lt;/p&gt;
+
+&lt;p&gt;Although nonviolence is the core of satyagraha, there is a lot more to it than that. Here are some relevant points; quoted material is from Bondurant’s book.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;The idea is not to beat the other side, but to come to a workable agreement that respects the needs of both sides. Rather than investing a lot of energy hating the opponent, try to see things from their side. Better yet, work out a solution that makes them look good. ‘Every effort should be made to win over the opponent by helping him (where this is consistent with the satyagrahi’s true objectives) thereby demonstrating sincerity to achieve an agreement with, rather than a triumph over, the adversary.’&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The first step in a satyagraha campaign is to try to redress grievances through established procedures. If you don’t first try to work within the system, how can you claim that the system is unresponsive?&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;‘Refrain from insults and swearing. Protect opponents from insult or attack, even at the risk of life.’ There is a message here for people who like to flame. Personal attacks tend to derail debate from the constructive to the combative.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Although most people associate Gandhi with civil disobedience, this is one of the last, most extreme forms of protest, to be undertaken only after a long list of other means have failed.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Gandhi’s autobiography is, of course, highly recommended, and I also thought Richard Attenborough’s movie ``Gandhi’’ was an excellent introduction to the topic.&lt;/p&gt;
+
+&lt;p&gt;Once a man came to Gandhi and admitted that he had killed a Muslim in a religious conflict. He felt badly that he had orphaned the Muslim’s son. Gandhi suggested that he raise the orphaned son as his own, but insisted that the boy be raised Muslim. This story, to me, sums up the method in a nutshell, especially the principal of respecting the other’s point of view.&lt;/p&gt;
+
+&lt;p&gt;It is all too easy to demonize the opponent. So often, though, when I find myself hating, later I realize that I am at war with some aspect of myself that I see in the opponent. So this important work, of trying to understand other points of view, ultimately leads to better integration with some of the exiled parts of my own psyche.&lt;/p&gt;
+
+&lt;p&gt;曾经我感到到自己憎恨对手的某一面，之后我发现恰恰是因为对手的这一面也存在于我自身之中。因此试着从不同的视觉看问题，最终将找回被驱逐的部分灵魂，使自己的灵魂完整。&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+      <item>
+        <title>big data and ssd</title>
+        <description>&lt;div id=&quot;table-of-contents&quot;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;div id=&quot;text-table-of-contents&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1&quot;&gt;1. 讲道理：大数据处理框架的性能分析 《making sense of performance in data analytics frameworks》&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-1&quot;&gt;1.1. NSDI15&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-2&quot;&gt;1.2. Abstract&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-3&quot;&gt;1.3. Introduction&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-3-1&quot;&gt;1.3.1. wide-accepted mantras about the performance of data analytics&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-3-2&quot;&gt;1.3.2. two contributions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4&quot;&gt;1.4. Methodology&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4-1&quot;&gt;1.4.1. workloads&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4-2&quot;&gt;1.4.2. framework architecture&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4-3&quot;&gt;1.4.3. blocked time analysis&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4-4&quot;&gt;1.4.4. cluster setup&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4-5&quot;&gt;1.4.5. production traces&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-5&quot;&gt;1.5. How important is disk I/O?&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-5-1&quot;&gt;1.5.1. measuring time blocked on disk I/O at four different points in task execution:&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-5-2&quot;&gt;1.5.2. summary&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-6&quot;&gt;1.6. How important is the network?&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-6-1&quot;&gt;1.6.1. why isn&#39;t the network more important?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-6-2&quot;&gt;1.6.2. are these results inconsistent with past work?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-6-3&quot;&gt;1.6.3. summary&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-7&quot;&gt;1.7. The role of Stragglers&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-7-1&quot;&gt;1.7.1. how much do stagglers affect job completion time?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-7-2&quot;&gt;1.7.2. Are these results inconsistent with prior work?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-7-3&quot;&gt;1.7.3. why do stragglers occur?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-7-4&quot;&gt;1.7.4. Improving performance by understanding stragglers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-7-5&quot;&gt;1.7.5. How Does Scale Affect Results?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-8&quot;&gt;1.8. How Does Scale Affect Results?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-9&quot;&gt;1.9. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2&quot;&gt;2. Tachyon: Reliable, Memory Speed Storage for Cluster Computing Frameworks&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-1&quot;&gt;2.1. SoCC 14&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-2&quot;&gt;2.2. Abstract&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-3&quot;&gt;2.3. introduction&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-3-1&quot;&gt;2.3.1. tow challenges:&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-4&quot;&gt;2.4. background&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-5&quot;&gt;2.5. design overview&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-6&quot;&gt;2.6. chekpointing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-7&quot;&gt;2.7. resource allocation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-8&quot;&gt;2.8. implementation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-9&quot;&gt;2.9. evaluation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3&quot;&gt;3. Introducing SSDs to the Hadoop MapReduce Framework&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-1&quot;&gt;3.1. Cloud Computing 14&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-2&quot;&gt;3.2. Abstract&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-3&quot;&gt;3.3. Introduction&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-3-1&quot;&gt;3.3.1. contributions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-4&quot;&gt;3.4. HDFS characteristics&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-4-1&quot;&gt;3.4.1. investigate environment&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-4-2&quot;&gt;3.4.2. storage vs Network&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-4-3&quot;&gt;3.4.3. Mutiple Readers/Writers&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-5&quot;&gt;3.5. MapReduce from a Storage Perspective&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-5-1&quot;&gt;3.5.1. Terasort Performance Analysis&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-5-2&quot;&gt;3.5.2. Cost Analysis&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3-6&quot;&gt;3.6. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4&quot;&gt;4. FB-Tree: A B+-Tree for Flash-Based SSDs&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-1&quot;&gt;4.1. IDEAS11 2011&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-2&quot;&gt;4.2. Abstract&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-3&quot;&gt;4.3. Introduction&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-3-1&quot;&gt;4.3.1. key features of SSD&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-3-2&quot;&gt;4.3.2. contribution of this paper is two-fold&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-4&quot;&gt;4.4. Motivation&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-4-1&quot;&gt;4.4.1. SSD&#39;s rather similar sequential and random read speeds&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-4-2&quot;&gt;4.4.2. the performance of the write workloads has the potential to be improved.&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-5&quot;&gt;4.5. Related Work&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-6&quot;&gt;4.6. FB-Tree&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-6-1&quot;&gt;4.6.1. write-optimized B-tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-6-2&quot;&gt;4.6.2. storage manager&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-6-3&quot;&gt;4.6.3. Buffer Manager&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-6-4&quot;&gt;4.6.4. conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-5&quot;&gt;5. Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6&quot;&gt;6. 问题：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;making-sense-of-performance-in-data-analytics-frameworksa-idsec-1-namesec-1a&quot;&gt;讲道理：大数据处理框架的性能分析 《making sense of performance in data analytics frameworks》&lt;a id=&quot;sec-1&quot; name=&quot;sec-1&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;nsdi15a-idsec-1-1-namesec-1-1a&quot;&gt;NSDI15&lt;a id=&quot;sec-1-1&quot; name=&quot;sec-1-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;abstracta-idsec-1-2-namesec-1-2a&quot;&gt;Abstract&lt;a id=&quot;sec-1-2&quot; name=&quot;sec-1-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;There has been much research devoted to improving the performance of data analytics frameworks, but comparatively little effort has been spent systematically identifying the performance bottlenecks of these systems.&lt;/p&gt;
+
+&lt;p&gt;Contrary to our expectations, we find that (i) CPU (and not I/O) is often the bottleneck, (ii)improving network performance can improve job completion time by a median of at most 2%, and (iii) the causes of most stragglers can be identified.&lt;/p&gt;
+
+&lt;h2 id=&quot;introductiona-idsec-1-3-namesec-1-3a&quot;&gt;Introduction&lt;a id=&quot;sec-1-3&quot; name=&quot;sec-1-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;wide-accepted-mantras-about-the-performance-of-data-analyticsa-idsec-1-3-1-namesec-1-3-1a&quot;&gt;wide-accepted mantras about the performance of data analytics&lt;a id=&quot;sec-1-3-1&quot; name=&quot;sec-1-3-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;The network is a bottleneck&lt;/p&gt;
+
+&lt;p&gt;The disk is a bottleneck.&lt;/p&gt;
+
+&lt;p&gt;Straggler tasks significantly prolong job completion times and have largely unknown underlying causes.&lt;/p&gt;
+
+&lt;h3 id=&quot;two-contributionsa-idsec-1-3-2-namesec-1-3-2a&quot;&gt;two contributions&lt;a id=&quot;sec-1-3-2&quot; name=&quot;sec-1-3-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;blocked time analysis&lt;/p&gt;
+
+    &lt;p&gt;Blocked time analysis uses extensive white-box logging to measure how long each task spends blocked on a given resource.&lt;/p&gt;
+
+    &lt;p&gt;Taken alone, these per-task measurements allow us to understand straggler causes by correlating slow tasks with long blocked times&lt;/p&gt;
+
+    &lt;p&gt;Taken together, the per-task measurements for a particular job allow us to simulate how long the job would have taken to complete if the disk or network were infinitely fast, which provides an upper bound on the benefit of optimizing network or disk performance.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;using blocked time analysis to understand Spark’s performance on two industry benchmarks and one production workload&lt;/p&gt;
+
+    &lt;p&gt;Network optimizations can only reduce job completion time by a median of at most 2%.&lt;/p&gt;
+
+    &lt;p&gt;Optimizing or eliminating disk accesses can only reduce job completion time by a median of at most 19%.&lt;/p&gt;
+
+    &lt;p&gt;Optimizing stragglers can only reduce job completion time by a median of at most 10%, and in 75%of queries, we can identify the cause of more than 60% of stragglers.&lt;/p&gt;
+
+    &lt;p&gt;Blocked-time analysis illustrates that the two leading causes of Spark stragglers are Java’s garbage collection and time to transfer data to and from disk.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;methodologya-idsec-1-4-namesec-1-4a&quot;&gt;Methodology&lt;a id=&quot;sec-1-4&quot; name=&quot;sec-1-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;workloadsa-idsec-1-4-1-namesec-1-4-1a&quot;&gt;workloads&lt;a id=&quot;sec-1-4-1&quot; name=&quot;sec-1-4-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;h3 id=&quot;framework-architecturea-idsec-1-4-2-namesec-1-4-2a&quot;&gt;framework architecture&lt;a id=&quot;sec-1-4-2&quot; name=&quot;sec-1-4-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;h3 id=&quot;blocked-time-analysisa-idsec-1-4-3-namesec-1-4-3a&quot;&gt;blocked time analysis&lt;a id=&quot;sec-1-4-3&quot; name=&quot;sec-1-4-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;instrumentation&lt;/p&gt;
+
+    &lt;ol&gt;
+      &lt;li&gt;
+        &lt;p&gt;logging&lt;/p&gt;
+
+        &lt;p&gt;Obtaining the measurements shown in Figure 1(b) required significant improvements to the instrumentation in Spark and in HDFS.While some of the instrumentation required was already available in Spark, our detailed performance analysis revealed that existing logging was often incorrect or incomplete [33–36, 38, 44]. Where necessary, we fixed existing logging and pushed the changes upstream to Spark.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;cross validation&lt;/p&gt;
+
+        &lt;p&gt;We found that cross validationwas crucial to validating that our measurements were correct. In addition to instrumentation for blocked time, we also added instrumentation about the CPU, network, and disk utilization on the machine while the task was running (per-task utilization cannot be measured in Spark, because all tasks run in a single process). Utilization measurements allowed us to cross validate blocked times; for example, by ensuring that when tasks spent little time blocked on I/O, CPU utilization was correspondingly high.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+        &lt;p&gt;no side effect&lt;/p&gt;
+
+        &lt;p&gt;As part of adding instrumentation, we measured Spark’s performance before and after the instrumentation was added to ensure the instrumentation did not add to job completion time.&lt;/p&gt;
+      &lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;simulation&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;cluster-setupa-idsec-1-4-4-namesec-1-4-4a&quot;&gt;cluster setup&lt;a id=&quot;sec-1-4-4&quot; name=&quot;sec-1-4-4&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;h3 id=&quot;production-tracesa-idsec-1-4-5-namesec-1-4-5a&quot;&gt;production traces&lt;a id=&quot;sec-1-4-5&quot; name=&quot;sec-1-4-5&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;h2 id=&quot;how-important-is-disk-ioa-idsec-1-5-namesec-1-5a&quot;&gt;How important is disk I/O?&lt;a id=&quot;sec-1-5&quot; name=&quot;sec-1-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;measuring-time-blocked-on-disk-io-at-four-different-points-in-task-executiona-idsec-1-5-1-namesec-1-5-1a&quot;&gt;measuring time blocked on disk I/O at four different points in task execution:&lt;a id=&quot;sec-1-5-1&quot; name=&quot;sec-1-5-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Reading input data stored on-disk&lt;/p&gt;
+
+    &lt;p&gt;(this only applies for the on-disk workloads; in-memory workloads read input from memory).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Writing shuffle data to disk.&lt;/p&gt;
+
+    &lt;p&gt;Spark writes all shuffle data to disk, even when input data is read from memory.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Reading shuffle data from a remote disk.&lt;/p&gt;
+
+    &lt;p&gt;This time includes both disk time (to read data from disk) and network time (to send the data over the network).Network and disk use is tightly coupled and thus challenging to measure separately; we measure the total time as an upper bound on the improvement from optimizing disk performance.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Writing output data to local disk and two remote disks&lt;/p&gt;
+
+    &lt;p&gt;(this only applies for the on-disk workloads). Again, the time to write data to remote disks includes network time as well; we measure both the network and disk time, making our results an upper bound on the improvement from optimizing disk.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;summarya-idsec-1-5-2-namesec-1-5-2a&quot;&gt;summary&lt;a id=&quot;sec-1-5-2&quot; name=&quot;sec-1-5-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;We found that job runtime cannot improve by more than 19% as a result of optimizing disk I/O. To shed more light on this measurement,we compared resource utilization while tasks were running, and found that CPU utilization is typically close to 100% whereas median disk utilization is at most 25%.&lt;/p&gt;
+
+&lt;p&gt;One reason for the relatively high use of CPU by the analytics workloads we studied is deserialization and compression&lt;/p&gt;
+
+&lt;p&gt;Serialization and compression formats will inevitably evolve in the future, rendering the numbers presented in this paper obsolete.&lt;/p&gt;
+
+&lt;h2 id=&quot;how-important-is-the-networka-idsec-1-6-namesec-1-6a&quot;&gt;How important is the network?&lt;a id=&quot;sec-1-6&quot; name=&quot;sec-1-6&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Our blocked time instrumentation for the network included time to read shuffle data over the network, and for on-diskworkloads, the time to write output data to one local machine and two remote machines.&lt;/p&gt;
+
+&lt;p&gt;Both of these times include disk use as well as network use, because disk and network are interlaced in a manner that makes them difficult to measure separately. As a result, 2% represents an upper bound on the possible improvement from network optimizations.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-isnt-the-network-more-importanta-idsec-1-6-1-namesec-1-6-1a&quot;&gt;why isn’t the network more important?&lt;a id=&quot;sec-1-6-1&quot; name=&quot;sec-1-6-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;One reason that network performance is relatively unimportant is that the amount of data sent over the network is often much less than the data transferred to disk, because analytics queries often shuffle and output much less data than they read.&lt;/p&gt;
+
+&lt;h3 id=&quot;are-these-results-inconsistent-with-past-worka-idsec-1-6-2-namesec-1-6-2a&quot;&gt;are these results inconsistent with past work?&lt;a id=&quot;sec-1-6-2&quot; name=&quot;sec-1-6-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;overestimate&lt;/p&gt;
+
+    &lt;p&gt;We instrumented Hadoop to log time spent writing output data and ran the big data benchmark (using Hive to convert SQL queries to Map Reduce jobs) and compared the result from the detailed instrumentation to the estimation previously used. Unfortunately, as shown in Figure 11, the previously used metric significantly overestimates time spent writing output data, meaning that the importance of the network was significantly overestimated.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;inefficiencies in hadoop&lt;/p&gt;
+
+    &lt;p&gt;A second problem with past estimations of the importance of the network is that they have conflated inefficiencies in Hadoop with network performance problems.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;summarya-idsec-1-6-3-namesec-1-6-3a&quot;&gt;summary&lt;a id=&quot;sec-1-6-3&quot; name=&quot;sec-1-6-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;One reason network performance has little effect on job completion time is that the data transferred over the network is a subset of data transferred to disk, so jobs bottleneck on the disk before bottlenecking on the network.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-role-of-stragglersa-idsec-1-7-namesec-1-7a&quot;&gt;The role of Stragglers&lt;a id=&quot;sec-1-7&quot; name=&quot;sec-1-7&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;how-much-do-stagglers-affect-job-completion-timea-idsec-1-7-1-namesec-1-7-1a&quot;&gt;how much do stagglers affect job completion time?&lt;a id=&quot;sec-1-7-1&quot; name=&quot;sec-1-7-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;the median improvement from eliminating stragglers is 5-10% for the big data benchmark and TPC-DS workloads, and lower for the productionworkloads, which had fewer stragglers.&lt;/p&gt;
+
+&lt;h3 id=&quot;are-these-results-inconsistent-with-prior-worka-idsec-1-7-2-namesec-1-7-2a&quot;&gt;Are these results inconsistent with prior work?&lt;a id=&quot;sec-1-7-2&quot; name=&quot;sec-1-7-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;h3 id=&quot;why-do-stragglers-occura-idsec-1-7-3-namesec-1-7-3a&quot;&gt;why do stragglers occur?&lt;a id=&quot;sec-1-7-3&quot; name=&quot;sec-1-7-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Our instrumentation allows us to describe the cause of more than 60% of stragglers in 75% of the queries we ran.&lt;/p&gt;
+
+&lt;p&gt;common patterns are that garbage collection can cause most of the stragglers for some queries, and many stragglers can be attributed to long times spent reading to or writing from disk (this is not inconsistent with our earlier results showing a 19% median improvement from eliminating disk: the fact that some straggler tasks are caused by long times spent)&lt;/p&gt;
+
+&lt;h3 id=&quot;improving-performance-by-understanding-stragglersa-idsec-1-7-4-namesec-1-7-4a&quot;&gt;Improving performance by understanding stragglers&lt;a id=&quot;sec-1-7-4&quot; name=&quot;sec-1-7-4&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Understanding the root cause behind stragglers provides ways to improve performance by mitigating the underlying cause. In our early experiments, investigating straggler causes led us to find that the default file system on the EC2 instances we used, ext3, performs poorly for workloads with large numbers of parallel reads and writes, leading to stragglers. By changing the filesystem to ext4, we fixed stragglers and reduced median task time, reducing query runtime for queries in the big data benchmark by 17−58%&lt;/p&gt;
+
+&lt;h3 id=&quot;how-does-scale-affect-resultsa-idsec-1-7-5-namesec-1-7-5a&quot;&gt;How Does Scale Affect Results?&lt;a id=&quot;sec-1-7-5&quot; name=&quot;sec-1-7-5&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;h2 id=&quot;how-does-scale-affect-resultsa-idsec-1-8-namesec-1-8a&quot;&gt;How Does Scale Affect Results?&lt;a id=&quot;sec-1-8&quot; name=&quot;sec-1-8&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;similar results&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusiona-idsec-1-9-namesec-1-9a&quot;&gt;Conclusion&lt;a id=&quot;sec-1-9&quot; name=&quot;sec-1-9&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;This paper undertook a detailed performance study of three workloads, and found that for those workloads, jobs are often bottlenecked on CPU and not I/O, network performance has little impact on job completion time, and many straggler causes can be identified and fixed.&lt;/p&gt;
+
+&lt;h1 id=&quot;tachyon-reliable-memory-speed-storage-for-cluster-computing-frameworksa-idsec-2-namesec-2a&quot;&gt;Tachyon: Reliable, Memory Speed Storage for Cluster Computing Frameworks&lt;a id=&quot;sec-2&quot; name=&quot;sec-2&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;socc-14a-idsec-2-1-namesec-2-1a&quot;&gt;SoCC 14&lt;a id=&quot;sec-2-1&quot; name=&quot;sec-2-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;abstracta-idsec-2-2-namesec-2-2a&quot;&gt;Abstract&lt;a id=&quot;sec-2-2&quot; name=&quot;sec-2-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;While caching today improves read workloads, writes are either network or disk bound, as replication is used for fault-tolerance. Tachyon eliminates this bottleneck by pushing lineage, a well-known technique, into the storage layer.&lt;/p&gt;
+
+&lt;p&gt;Our evaluation shows that Tachyon outperforms in-memory HDFS by 110x for writes.It also improves the end-to-end latency of a realistic
+workflow by 4x.&lt;/p&gt;
+
+&lt;h2 id=&quot;introductiona-idsec-2-3-namesec-2-3a&quot;&gt;introduction&lt;a id=&quot;sec-2-3&quot; name=&quot;sec-2-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;As the performance of many of these systems is I/O bound, traditional means of improving their speed is to cache data into memory.&lt;/p&gt;
+
+&lt;p&gt;To improve write performance, we present Tachyon, an in-memory storage system that achieves high throughput writes and reads, without compromising fault-tolerance.&lt;/p&gt;
+
+&lt;h3 id=&quot;tow-challengesa-idsec-2-3-1-namesec-2-3-1a&quot;&gt;tow challenges:&lt;a id=&quot;sec-2-3-1&quot; name=&quot;sec-2-3-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;bounding the recomputation cost for a long-running storage system.&lt;/p&gt;
+
+    &lt;p&gt;checkpoiont + linage, no replication&lt;/p&gt;
+
+    &lt;p&gt;Tachyon bounds the data recomputation cost, thus addressing the first challenge, by continuously checkpointing files asynchronously in the background. To select which files to checkpoint and when, we propose a novel algorithm, called the Edge algorithm, that provides an upper bound on the recomputation cost regardless of the workload’s access pattern.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;how to allocate resources for recomputations&lt;/p&gt;
+
+    &lt;p&gt;Tachyon provides resource allocation schemes that respect job priorities under two common cluster allocation models: strict priority and
+weighted fair sharing [31, 52].&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;backgrounda-idsec-2-4-namesec-2-4a&quot;&gt;background&lt;a id=&quot;sec-2-4&quot; name=&quot;sec-2-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;design-overviewa-idsec-2-5-namesec-2-5a&quot;&gt;design overview&lt;a id=&quot;sec-2-5&quot; name=&quot;sec-2-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;chekpointinga-idsec-2-6-namesec-2-6a&quot;&gt;chekpointing&lt;a id=&quot;sec-2-6&quot; name=&quot;sec-2-6&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;resource-allocationa-idsec-2-7-namesec-2-7a&quot;&gt;resource allocation&lt;a id=&quot;sec-2-7&quot; name=&quot;sec-2-7&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;implementationa-idsec-2-8-namesec-2-8a&quot;&gt;implementation&lt;a id=&quot;sec-2-8&quot; name=&quot;sec-2-8&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;evaluationa-idsec-2-9-namesec-2-9a&quot;&gt;evaluation&lt;a id=&quot;sec-2-9&quot; name=&quot;sec-2-9&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h1 id=&quot;introducing-ssds-to-the-hadoop-mapreduce-frameworka-idsec-3-namesec-3a&quot;&gt;Introducing SSDs to the Hadoop MapReduce Framework&lt;a id=&quot;sec-3&quot; name=&quot;sec-3&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;cloud-computing-14a-idsec-3-1-namesec-3-1a&quot;&gt;Cloud Computing 14&lt;a id=&quot;sec-3-1&quot; name=&quot;sec-3-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;abstracta-idsec-3-2-namesec-3-2a&quot;&gt;Abstract&lt;a id=&quot;sec-3-2&quot; name=&quot;sec-3-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;This paper compares SSD performance to HDD performance within a Hadoop MapReduce framework. It identifies extensible best practices that can exploit SSD benefits within Hadoop frameworks when combined with high network bandwidth and increased parallel storage access.&lt;/p&gt;
+
+&lt;p&gt;Terasort benchmark results demonstrate that SSDs presently deliver significant costeffectiveness when they store intermediate Hadoop data, leaving HDDs to store Hadoop Distributed File System (HDFS) source data.&lt;/p&gt;
+
+&lt;h2 id=&quot;introductiona-idsec-3-3-namesec-3-3a&quot;&gt;Introduction&lt;a id=&quot;sec-3-3&quot; name=&quot;sec-3-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;While many options and strategies can improve MapReduce performance, introducing SSDs is a particularly attractive strategy because SSDs typically exhibit superior performance - lower latency, higher IO rates, and higher throughput - than HDDs.&lt;/p&gt;
+
+&lt;h3 id=&quot;contributionsa-idsec-3-3-1-namesec-3-3-1a&quot;&gt;contributions&lt;a id=&quot;sec-3-3-1&quot; name=&quot;sec-3-3-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;We investigate and compare HDFS performance using SSDs and HDDs in different configurations&lt;/p&gt;
+
+&lt;p&gt;We examine Hadoop workflows and identify various performance bottlenecks within different configurations.&lt;/p&gt;
+
+&lt;p&gt;We explore cost-effective MapReduce configurations.&lt;/p&gt;
+
+&lt;h2 id=&quot;hdfs-characteristicsa-idsec-3-4-namesec-3-4a&quot;&gt;HDFS characteristics&lt;a id=&quot;sec-3-4&quot; name=&quot;sec-3-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;investigate-environmenta-idsec-3-4-1-namesec-3-4-1a&quot;&gt;investigate environment&lt;a id=&quot;sec-3-4-1&quot; name=&quot;sec-3-4-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Raw Storage Device Performance&lt;/p&gt;
+
+    &lt;p&gt;We used the fio benchmark with the following options: (1) queue depth = 32, (2) 128KB block size, (3) sync I/O, and (4) direct I/O. System engineers typically allow enough queue depth since block device drivers significantly delay overall I/O performance with small queue depth. We found that configurations with queue depth more than 32 or with block size more than 128KB marginally changed the result.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;TestDFSIO&lt;/p&gt;
+
+    &lt;p&gt;Test Distributed File System I/O (TestDFSIO, here after DFSIO) is a widely-used, industry-standard benchmark that enables HDFS performance benchmarks. It distributes map tasks that read/write complete dummy data files on Datanodes for HDFS. Each map task reads the complete local file and writes a few statistical output lines. Reduce tasks simply gather the statistics for output&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;storage-vs-networka-idsec-3-4-2-namesec-3-4-2a&quot;&gt;storage vs Network&lt;a id=&quot;sec-3-4-2&quot; name=&quot;sec-3-4-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;We performed HDFS performance measurements using 1Gbit Ethernet links, 20Gbit links constructed by combining two 10Gbit Ethernet links via link aggregation (channel bonding), HDDs, and, SSDs. This enabled us to vary storage devices and network bandwidth to determine how various SSD and high network bandwidth combinations could improve throughput.&lt;/p&gt;
+
+&lt;p&gt;Employing more HDDs or SSDs can utilize the potential of high performance networks. Consequently, matching network bandwidth and I/O throughput is key to build cost-efficient system.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Network bandwidth requirement for high performance storage systems&lt;/p&gt;
+
+    &lt;p&gt;KT = ND&lt;/p&gt;
+
+    &lt;p&gt;0.5KB &amp;gt;= D(N-1)&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;mutiple-readerswritersa-idsec-3-4-3-namesec-3-4-3a&quot;&gt;Mutiple Readers/Writers&lt;a id=&quot;sec-3-4-3&quot; name=&quot;sec-3-4-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Unlike when using HDDs, increasing the concurrent thread count improves HDFS performance when using SSDs because random SSD read performance approximates sequential read performance (the highest possible performance).&lt;/p&gt;
+
+&lt;h2 id=&quot;mapreduce-from-a-storage-perspectivea-idsec-3-5-namesec-3-5a&quot;&gt;MapReduce from a Storage Perspective&lt;a id=&quot;sec-3-5&quot; name=&quot;sec-3-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;The place to write intermediate data is configurable. We call the local storage keeping intermediate data intermediate storage.&lt;/p&gt;
+
+&lt;p&gt;Compressing map output is often used to reduce the amount of data stored in the intermediate storage (and transferred through the cluster network)&lt;/p&gt;
+
+&lt;h3 id=&quot;terasort-performance-analysisa-idsec-3-5-1-namesec-3-5-1a&quot;&gt;Terasort Performance Analysis&lt;a id=&quot;sec-3-5-1&quot; name=&quot;sec-3-5-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Key Terasort performance observations are:&lt;/p&gt;
+
+&lt;p&gt;(1) Map phase performance depends on the performance of HDFS read throughput (primarily sequential).&lt;/p&gt;
+
+&lt;p&gt;(2) Shuffle phase performance mainly depends on the random I/O performance when reading map output and writing intermediate data. To explicitly identify performance-degradation sources, we profiled CPU and I/O utilizations during investigations, depicted in Figure 8 and 9.&lt;/p&gt;
+
+&lt;p&gt;(3) Reduce phase performance depends more on the random read performance of the storage keeping intermediate data than on the HDFS storage media performance.&lt;/p&gt;
+
+&lt;h3 id=&quot;cost-analysisa-idsec-3-5-2-namesec-3-5-2a&quot;&gt;Cost Analysis&lt;a id=&quot;sec-3-5-2&quot; name=&quot;sec-3-5-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;The previous section’s Terasort evaluation shows that introducing more DRAM or an SSD to Datanodes as intermediate data storage significantly reduces shuffle phase execution time. When also deploying SSDs as permanent HDFS storage, Hadoop map and reduce phase performance considerably improves.&lt;/p&gt;
+
+&lt;p&gt;However, SSD cost-per-bit is presently not inexpensive enough to replace all HDDs. Nevertheless, it is still rapidly decreasing. To estimate Datanode cost-effectiveness, we considered both Datanode configuration cost and Datanode performance.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusiona-idsec-3-6-namesec-3-6a&quot;&gt;Conclusion&lt;a id=&quot;sec-3-6&quot; name=&quot;sec-3-6&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Sufficient network bandwidth and more I/O parallelism to utilize the maximum SSD performance are critical to the performance of HDFS and Hadoop MapReduce framework.&lt;/p&gt;
+
+&lt;p&gt;Specifically, SSDs help when they are used as temporary storage for intermediate data which consists of heavy random and concurrent I/O. We observed that using SSDs for temporary storage and HDDs for permanent storage for HDFS is the most cost effective configuration today.&lt;/p&gt;
+
+&lt;h1 id=&quot;fb-tree-a-b-tree-for-flash-based-ssdsa-idsec-4-namesec-4a&quot;&gt;FB-Tree: A B+-Tree for Flash-Based SSDs&lt;a id=&quot;sec-4&quot; name=&quot;sec-4&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;ideas11-2011a-idsec-4-1-namesec-4-1a&quot;&gt;IDEAS11 2011&lt;a id=&quot;sec-4-1&quot; name=&quot;sec-4-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Proceedings of the 15th Symposium on International Database Engineering &amp;amp; Applications&lt;/p&gt;
+
+&lt;h2 id=&quot;abstracta-idsec-4-2-namesec-4-2a&quot;&gt;Abstract&lt;a id=&quot;sec-4-2&quot; name=&quot;sec-4-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;ash-based SSDs (Solid-State Drives) have become a mainstream alternative to magnetic disks for database servers.&lt;/p&gt;
+
+&lt;p&gt;Nevertheless, database systems, designed and optimized for magnetic disks, still do not fully exploit all the benets of the new technology&lt;/p&gt;
+
+&lt;p&gt;We propose the FB-tree: a combination of an adapted B+- tree, a storage manager, and a buer manager, all optimized for modern SSDs.* SSD usage in Facebook.&lt;/p&gt;
+
+&lt;p&gt;Together the techniques enable writing to SSDs in relatively large blocks, thus achieving greater overall throughput. This is achieved by the out-of-place writing, whereby every time a modied index node is written, it is written to a new address, clustered with some other nodes that are written together.&lt;/p&gt;
+
+&lt;p&gt;While this constantly frees index nodes, the FB-tree does not introduce any garbage-collection overhead, instead relying on naturally occurring free-space segments of sufficient size.&lt;/p&gt;
+
+&lt;p&gt;As a consequence, the FB-tree outperforms a regular B+-tree in all scenarios tested. For instance, the throughput of a random workload of 75% updates increases by a factor of three using only two times the space of the B+-tree.&lt;/p&gt;
+
+&lt;h2 id=&quot;introductiona-idsec-4-3-namesec-4-3a&quot;&gt;Introduction&lt;a id=&quot;sec-4-3&quot; name=&quot;sec-4-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;At first, NAND  flash was intended for embedded storage, where its small size and low power consumption were the key benets.&lt;/p&gt;
+
+&lt;p&gt;In recent years, NAND flash storage has emerged into the world of mainstream storage, where its fast random access and low power consumption are considered its key benets.&lt;/p&gt;
+
+&lt;p&gt;In present database systems, most aspects are optimized with respect to the performance characteristics of magnetic disks, and hence these optimizations must be reconsidered [6, 8, 19].&lt;/p&gt;
+
+&lt;p&gt;One of the key parts of the data base internals that have to be reconsidered are the index methods and especially the ubiquitous B+-tree index structure.&lt;/p&gt;
+
+&lt;p&gt;proposals successfully enforcing a sequential workload of writes, either severely degrade the other properties of the existing B+-tree , or completely redesign the index structure [9, 20], making it difficult to implement and integrate with the existing systems.&lt;/p&gt;
+
+&lt;h3 id=&quot;key-features-of-ssda-idsec-4-3-1-namesec-4-3-1a&quot;&gt;key features of SSD&lt;a id=&quot;sec-4-3-1&quot; name=&quot;sec-4-3-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;in this paper, we embrace two key features of SSDs&lt;/td&gt;
+      &lt;td&gt;very fast random reads and the fact that larger writes are more efficient than smaller ones.&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;contribution-of-this-paper-is-two-folda-idsec-4-3-2-namesec-4-3-2a&quot;&gt;contribution of this paper is two-fold&lt;a id=&quot;sec-4-3-2&quot; name=&quot;sec-4-3-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;First, we propose the adaptation of the write-optimized B-tree for SSDs by combining it with the specially designed buffer manager and storage manager. The combination, which we term the FB-tree, enables to improve the performance of any query/update workloads and does so with only slight 34 modications to the well known B+-tree.&lt;/p&gt;
+
+&lt;p&gt;Second, we report on extensive experimental study of the FB-tree and the B+-tree on modern SSDs.&lt;/p&gt;
+
+&lt;h2 id=&quot;motivationa-idsec-4-4-namesec-4-4a&quot;&gt;Motivation&lt;a id=&quot;sec-4-4&quot; name=&quot;sec-4-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h3 id=&quot;ssds-rather-similar-sequential-and-random-read-speedsa-idsec-4-4-1-namesec-4-4-1a&quot;&gt;SSD’s rather similar sequential and random read speeds&lt;a id=&quot;sec-4-4-1&quot; name=&quot;sec-4-4-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Hence, we discard clustering on SSDs. Removing this legacy optimization from the B+-tree indexing scheme opens up for other possible SSD optimizations, as no special placement of pages is required for getting a fast range scan.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-performance-of-the-write-workloads-has-the-potential-to-be-improveda-idsec-4-4-2-namesec-4-4-2a&quot;&gt;the performance of the write workloads has the potential to be improved.&lt;a id=&quot;sec-4-4-2&quot; name=&quot;sec-4-4-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;With a workload of random writes of 4{8KB caused by updating the B+-tree nodes in-place, an SSD will perform its absolute worst.&lt;/p&gt;
+
+&lt;p&gt;To improve on the write performance, a solution would be to write in larger sizes or ultimately write large sequential writes, and, notably, this has been the main concern when optimizing the B+-tree workloads or building new indexing schemes for flash and SSDs [9, 19, 20].&lt;/p&gt;
+
+&lt;p&gt;The SSD incurs somewhat the same trend but on a much smaller scale. The results are, however, encouraging enough to be used for improving the write workload of a B+-tree on an SSD.&lt;/p&gt;
+
+&lt;p&gt;With the combined fact that the placement of nodes in a B+-tree structure is no longer restricted by clustering and that performing relatively large writes improves performance.&lt;/p&gt;
+
+&lt;p&gt;we propose the FB-tree, which is a B+-tree indexing scheme where nodes are written in an out-of-place fashion also called copy-on-write.&lt;/p&gt;
+
+&lt;h2 id=&quot;related-worka-idsec-4-5-namesec-4-5a&quot;&gt;Related Work&lt;a id=&quot;sec-4-5&quot; name=&quot;sec-4-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;h2 id=&quot;fb-treea-idsec-4-6-namesec-4-6a&quot;&gt;FB-Tree&lt;a id=&quot;sec-4-6&quot; name=&quot;sec-4-6&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;First, we present the write-optimized B-tree , which is theB+-tree variant we choose as a basis of our proposal.&lt;/p&gt;
+
+&lt;p&gt;Next, we introduce our algorithms for the storage manager and the buffer manager.&lt;/p&gt;
+
+&lt;h3 id=&quot;write-optimized-b-treea-idsec-4-6-1-namesec-4-6-1a&quot;&gt;write-optimized B-tree&lt;a id=&quot;sec-4-6-1&quot; name=&quot;sec-4-6-1&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;original paper&lt;/p&gt;
+
+    &lt;p&gt;G. Graefe. Write-Optimized B-Trees. In proc. of VLDB, pp. 672{683, 2004.}&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;algorithm&lt;/p&gt;
+
+    &lt;p&gt;The main idea behind the write-optimized B-tree is borrowed from the log-structured le systems (LFS ), where every piece of data is written in a out-of-place fashion, collecting smaller writes into larger writes.&lt;/p&gt;
+
+    &lt;p&gt;In a normal LFS, writing out-of-place requires maintaining a mapping between a stable logical address and a frequently changing physical addresse.&lt;/p&gt;
+
+    &lt;p&gt;While this overhead is required for a le system, not having any control over the overlying data structure, the overhead can be diminished by instead incorporating the mapping into the index structure.&lt;/p&gt;
+
+    &lt;p&gt;While the write-optimized B-tree enables out-of-place writes, they do not automatically guarantee that a large group of such writes can be collected into a single large write. Careful consideration of the algorithms of the storage manager and the buer manager are necessary.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;storage-managera-idsec-4-6-2-namesec-4-6-2a&quot;&gt;storage manager&lt;a id=&quot;sec-4-6-2&quot; name=&quot;sec-4-6-2&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;While for disk-based systems, storage manager main contain algorithms for defragmentation or reorganization of nodes to improve reading performance, this is an unnecessary overhead for SSDs. For modern SSDs, the recommended disk scheduling and le system optimization is \no optimization” [2, 3].”&lt;/p&gt;
+
+&lt;p&gt;With this in mind we propose a simple storage manager that incurs no I/O overhead. The idea is to perform relatively large writes as much as possible. Thus, the storage manager manages the free space so that several nodes can be written at a time, claiming a relatively large chunk of free space. The simple policy is to choose the largest naturally occurring free space segment and write as many evicted nodes as possible contiguously in this segment.&lt;/p&gt;
+
+&lt;p&gt;One benefit of out-of-place writing is the possibility of exploiting the fact that B-tree nodes are not completely filled (approximately 68% on average ).&lt;/p&gt;
+
+&lt;p&gt;As evicted nodes can be of dierent sizes, the group of evicted nodes does not always t perfectly into the largest free space segment, possibly leaving some space in the segment unused. This potentially causes further unnecessary fragmentation, and hence, we propose to use a rened policy, the so-called exact t, which includes searching for a segment of free space that serves as the best t, leaving as little wasted space as possible. Such a segment of free space may not necessarily be the largest one*** buffer manager.&lt;/p&gt;
+
+&lt;p&gt;As the storage manager in FB-tree does not perform any defragmentation of nodes and free space, the amount of free space is especially important for maintaining a high probability of large free space segments&lt;/p&gt;
+
+&lt;h3 id=&quot;buffer-managera-idsec-4-6-3-namesec-4-6-3a&quot;&gt;Buffer Manager&lt;a id=&quot;sec-4-6-3&quot; name=&quot;sec-4-6-3&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;Probably the best-known buering mechanism is the Least-Recently-Used (LRU) buer, which simply evicts the page least recently used.&lt;/p&gt;
+
+&lt;p&gt;Treating buffer reads and buffer writes differently is motivated by the asymmetric performance of read and write on flash and SSDs, when reads are faster than writes.&lt;/p&gt;
+
+&lt;p&gt;As a consequence, proposals have been made [13, 14] for different flash-friendly replacement policies, the main idea of which is evicting clean pages before dirty pages.&lt;/p&gt;
+
+&lt;p&gt;What makes the proposed buffering mechanism significantly different from the other flash-optimized buffer managers, is the ability to evict several dirty pages at a time&lt;/p&gt;
+
+&lt;h3 id=&quot;conclusiona-idsec-4-6-4-namesec-4-6-4a&quot;&gt;conclusion&lt;a id=&quot;sec-4-6-4&quot; name=&quot;sec-4-6-4&quot;&gt;&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;In the future, we plan to explore the concurrency algorithms of the FB-tree&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusiona-idsec-5-namesec-5a&quot;&gt;Conclusion&lt;a id=&quot;sec-5&quot; name=&quot;sec-5&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;第一篇论文《大数据处理框架的性能分析》为我们的研究提供了性能分析工具&lt;/p&gt;
+
+&lt;p&gt;这几篇论文的性能分析，实验方法我们可以模仿&lt;/p&gt;
+
+&lt;p&gt;tachyon的论文原文没有提它对于大数据分析的提升效果，因为理论上和实际上应该提升并不大，tachyon的商业公司的宣传不能信&lt;/p&gt;
+
+&lt;p&gt;tachyon把shuffle阶段的中间数据放在内存文件系统，不符合大数据处理追求高性价比的初衷&lt;/p&gt;
+
+&lt;p&gt;另一些研究把shuffle阶段的中间数据放在SSD上，性价比更高，很关键！&lt;/p&gt;
+
+&lt;h1 id=&quot;a-idsec-6-namesec-6a&quot;&gt;问题：&lt;a id=&quot;sec-6&quot; name=&quot;sec-6&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;为什么spark把shuffle中间数据放到磁盘上？&lt;/p&gt;
+
+&lt;p&gt;shuffle阶段的策略和算法还可以优化，有需要sort的，也有不需要sort的；不需要sort的应用直接使用hash table&lt;/p&gt;
+
+&lt;p&gt;不能把中间数据放到SSD上就完了，应当使用为SSD优化过的数据结构，例如FB-Tree&lt;/p&gt;
+
+&lt;p&gt;集群配置：网络吞吐量和磁盘吞吐量如何最优化配置？&lt;/p&gt;
+
+&lt;p&gt;使用本地存储如hdfs和统一外部存储如S3，对于网络吞吐量和性价比的影响&lt;/p&gt;
+
+&lt;p&gt;压缩shuffle阶段中间数据对于性能的影响？能否通过压缩提升io密集型应用的性能？&lt;/p&gt;
+
+&lt;div id=&quot;footnotes&quot;&gt;
+&lt;h2 class=&quot;footnotes&quot;&gt;Footnotes: &lt;/h2&gt;
+&lt;div id=&quot;text-footnotes&quot;&gt;
+
+&lt;div class=&quot;footdef&quot;&gt;&lt;sup&gt;&lt;a id=&quot;fn.1&quot; name=&quot;fn.1&quot; class=&quot;footnum&quot; href=&quot;#fnr.1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; &lt;p&gt;DEFINITION NOT FOUND.&lt;/p&gt;&lt;/div&gt;
+
+&lt;div class=&quot;footdef&quot;&gt;&lt;sup&gt;&lt;a id=&quot;fn.2&quot; name=&quot;fn.2&quot; class=&quot;footnum&quot; href=&quot;#fnr.2&quot;&gt;2&lt;/a&gt;&lt;/sup&gt; &lt;p&gt;DEFINITION NOT FOUND.&lt;/p&gt;&lt;/div&gt;
+
+&lt;div class=&quot;footdef&quot;&gt;&lt;sup&gt;&lt;a id=&quot;fn.3&quot; name=&quot;fn.3&quot; class=&quot;footnum&quot; href=&quot;#fnr.3&quot;&gt;3&lt;/a&gt;&lt;/sup&gt; &lt;p&gt;DEFINITION NOT FOUND.&lt;/p&gt;&lt;/div&gt;
+
+&lt;div class=&quot;footdef&quot;&gt;&lt;sup&gt;&lt;a id=&quot;fn.4&quot; name=&quot;fn.4&quot; class=&quot;footnum&quot; href=&quot;#fnr.4&quot;&gt;4&lt;/a&gt;&lt;/sup&gt; &lt;p&gt;DEFINITION NOT FOUND.&lt;/p&gt;&lt;/div&gt;
+
+
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/research/2016/03/13/big-data-and-ssd.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/research/2016/03/13/big-data-and-ssd.html</guid>
+        
+        
+        <category>research</category>
+        
+      </item>
+    
+      <item>
+        <title>you and your research - by Richard Hamming </title>
+        <description>&lt;div id=&quot;table-of-contents&quot;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;div id=&quot;text-table-of-contents&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1&quot;&gt;1. psychologically. I find that the major objection is that people think great science is done by luck.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2&quot;&gt;2. One of the characteristics of successful scientists is having courage.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3&quot;&gt;3. What most people think are the best working conditions, are not. Very clearly they are not because people are often most productive when working conditions are bad.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4&quot;&gt;4. Now for the matter of drive.&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-1&quot;&gt;4.1. knowledge and productivity are like compound interest&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-2&quot;&gt;4.2. On this matter of drive Edison says, ``Genius is 99% perspiration and 1% inspiration.&#39;&#39;&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-5&quot;&gt;5. Great contributions are rarely done by adding another decimal place. It comes down to an emotional commitment.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-6&quot;&gt;6. Great scientists tolerate ambiguity very well.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-7&quot;&gt;7. if you do not work on an important problem, it&#39;s unlikely you&#39;ll do important work.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-8&quot;&gt;8. You can&#39;t always know exactly where to be, but you can keep active in places where something might happen&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-9&quot;&gt;9. The essence of science is cumulative.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-10&quot;&gt;10. it is not sufficient to do a job, you have to sell it.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-11&quot;&gt;11. You&#39;ve got to work on important problems. I deny that it is all luck, but I admit there is a fair element of luck.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-12&quot;&gt;12. is the effort to be a great scientist worth it?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13&quot;&gt;13. I&#39;ve told you how to do it. It is so easy, so why do so many people, with all their talents, fail?&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-1&quot;&gt;13.1. one of the reasons is drive and commitment.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-2&quot;&gt;13.2. The second thing is, I think, the problem of personality defects.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-3&quot;&gt;13.3. Another personality defect is ego assertion&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-4&quot;&gt;13.4. What it comes down to basically is that you cannot be original in one area without having originality in others.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-5&quot;&gt;13.5. Another fault is anger.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-6&quot;&gt;13.6. Another thing you should look for is the positive side of things instead of the negative&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-13-7&quot;&gt;13.7. Now self-delusion in humans is very, very common&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-14&quot;&gt;14. in summary, I claim that some of the reasons why so many people who have greatness within their grasp don&#39;t succeed are:&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;psychologically-i-find-that-the-major-objection-is-that-people-think-great-science-is-done-by-lucka-idsec-1-namesec-1a&quot;&gt;psychologically. I find that the major objection is that people think great science is done by luck.&lt;a id=&quot;sec-1&quot; name=&quot;sec-1&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Well, consider Einstein. Note how many different things he did that were good. Was it all luck? Wasn’t it a little too repetitive? Consider Shannon. He didn’t do just information theory. Several years before, he did some other good things and some which are still locked up in the security of cryptography. He did many good things.
+You see again and again, that it is more than one thing from a good person. Once in a while a person does only one thing in his whole life, and we’ll talk about that later, but a lot of times there is repetition. I claim that luck will not cover everything.&lt;/p&gt;
+
+&lt;h1 id=&quot;one-of-the-characteristics-of-successful-scientists-is-having-couragea-idsec-2-namesec-2a&quot;&gt;One of the characteristics of successful scientists is having courage.&lt;a id=&quot;sec-2&quot; name=&quot;sec-2&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Once you get your courage up and believe that you can do important problems, then you can. If you think you can’t, almost surely you are not going to. Courage is one of the things that Shannon had supremely. You have only to think of his major theorem. He wants to create a method of coding, but he doesn’t know what to do so he makes a random code. Then he is stuck. And then he asks the impossible question, ``What would the average random code do?’’ He then proves that the average code is arbitrarily good, and that therefore there must be at least one good code. Who but a man of infinite courage could have dared to think those thoughts? That is the characteristic of great scientists; they have courage. They will go forward under incredible circumstances; they think and continue to think.&lt;/p&gt;
+
+&lt;h1 id=&quot;what-most-people-think-are-the-best-working-conditions-are-not-very-clearly-they-are-not-because-people-are-often-most-productive-when-working-conditions-are-bada-idsec-3-namesec-3a&quot;&gt;What most people think are the best working conditions, are not. Very clearly they are not because people are often most productive when working conditions are bad.&lt;a id=&quot;sec-3&quot; name=&quot;sec-3&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;think that if you look carefully you will see that often the great scientists, by turning the problem around a bit, changed a defect to an asset. For example, many scientists when they found they couldn’t do a problem finally began to study why not. They then turned it around the other way and said, ``But of course, this is what it is’’ and got an important result. So ideal working conditions are very strange. The ones you want aren’t always the best ones for you.&lt;/p&gt;
+
+&lt;h1 id=&quot;now-for-the-matter-of-drivea-idsec-4-namesec-4a&quot;&gt;Now for the matter of drive.&lt;a id=&quot;sec-4&quot; name=&quot;sec-4&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;You observe that most great scientists have tremendous drive. I worked for ten years with John Tukey at Bell Labs. He had tremendous drive. One day about three or four years after I joined, I discovered that John Tukey was slightly younger than I was. John was a genius and I clearly was not. Well I went storming into Bode’s office and said, ``How can anybody my age know as much as John Tukey does?’’ He leaned back in his chair, put his hands behind his head, grinned slightly, and said, ``You would be surprised Hamming, how much you would know if you worked as hard as he did that many years.’’ I simply slunk out of the office!&lt;/p&gt;
+
+&lt;h2 id=&quot;knowledge-and-productivity-are-like-compound-interesta-idsec-4-1-namesec-4-1a&quot;&gt;knowledge and productivity are like compound interest&lt;a id=&quot;sec-4-1&quot; name=&quot;sec-4-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Given two people of approximately the same ability and one person who works ten percent more than the other, the latter will more than twice outproduce the former. The more you know, the more you learn; the more you learn, the more you can do; the more you can do, the more the opportunity - it is very much like compound interest.&lt;/p&gt;
+
+&lt;h2 id=&quot;on-this-matter-of-drive-edison-says-genius-is-99-perspiration-and-1-inspirationa-idsec-4-2-namesec-4-2a&quot;&gt;On this matter of drive Edison says, ``Genius is 99% perspiration and 1% inspiration.’‘&lt;a id=&quot;sec-4-2&quot; name=&quot;sec-4-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;I’ve often wondered why so many of my good friends at Bell Labs who worked as hard or harder than I did, didn’t have so much to show for it. The misapplication of effort is a very serious matter. Just hard work is not enough - it must be applied sensibly.&lt;/p&gt;
+
+&lt;h1 id=&quot;great-contributions-are-rarely-done-by-adding-another-decimal-place-it-comes-down-to-an-emotional-commitmenta-idsec-5-namesec-5a&quot;&gt;Great contributions are rarely done by adding another decimal place. It comes down to an emotional commitment.&lt;a id=&quot;sec-5&quot; name=&quot;sec-5&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;Most great scientists are completely committed to their problem. Those who don’t become committed seldom produce outstanding, first-class work.&lt;/p&gt;
+
+&lt;h1 id=&quot;great-scientists-tolerate-ambiguity-very-wella-idsec-6-namesec-6a&quot;&gt;Great scientists tolerate ambiguity very well.&lt;a id=&quot;sec-6&quot; name=&quot;sec-6&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;They believe the theory enough to go ahead; they doubt it enough to notice the errors and faults so they can step forward and create the new replacement theory.&lt;/p&gt;
+
+&lt;h1 id=&quot;if-you-do-not-work-on-an-important-problem-its-unlikely-youll-do-important-worka-idsec-7-namesec-7a&quot;&gt;if you do not work on an important problem, it’s unlikely you’ll do important work.&lt;a id=&quot;sec-7&quot; name=&quot;sec-7&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;We didn’t work on (1) time travel, (2) teleportation, and (3) antigravity. They are not important problems because we do not have an attack. It’s not the consequence that makes a problem important, it is that you have a reasonable attack. That is what makes a problem important.
+When I say that most scientists don’t work on important problems, I mean it in that sense. The average scientist, so far as I can make out, spends almost all his time working on problems which he believes will not be important and he also doesn’t believe that they will lead to important problems.&lt;/p&gt;
+
+&lt;h1 id=&quot;you-cant-always-know-exactly-where-to-be-but-you-can-keep-active-in-places-where-something-might-happena-idsec-8-namesec-8a&quot;&gt;You can’t always know exactly where to be, but you can keep active in places where something might happen&lt;a id=&quot;sec-8&quot; name=&quot;sec-8&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;When I went to lunch Friday noon, I would only discuss great thoughts after that. By great thoughts I mean ones like: ``What will be the role of computers in all of AT&amp;amp;T?’’, ``How will computers change science?’’&lt;/p&gt;
+
+&lt;h1 id=&quot;the-essence-of-science-is-cumulativea-idsec-9-namesec-9a&quot;&gt;The essence of science is cumulative.&lt;a id=&quot;sec-9&quot; name=&quot;sec-9&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;By changing a problem slightly you can often do great work rather than merely good work. Instead of attacking isolated problems, I made the resolution that I would never again solve an isolated problem except as characteristic of a class.&lt;/p&gt;
+
+&lt;h1 id=&quot;it-is-not-sufficient-to-do-a-job-you-have-to-sell-ita-idsec-10-namesec-10a&quot;&gt;it is not sufficient to do a job, you have to sell it.&lt;a id=&quot;sec-10&quot; name=&quot;sec-10&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;`Selling’ to a scientist is an awkward thing to do. It’s very ugly; you shouldn’t have to do it. The world is supposed to be waiting, and when you do something great, they should rush out and welcome it. But the fact is everyone is busy with their own work. You must present it so well that they will set aside what they are doing, look at what you’ve done, read it, and come back and say, ``Yes, that was good.’’&lt;/p&gt;
+
+&lt;h1 id=&quot;youve-got-to-work-on-important-problems-i-deny-that-it-is-all-luck-but-i-admit-there-is-a-fair-element-of-lucka-idsec-11-namesec-11a&quot;&gt;You’ve got to work on important problems. I deny that it is all luck, but I admit there is a fair element of luck.&lt;a id=&quot;sec-11&quot; name=&quot;sec-11&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;I subscribe to Pasteur’s ``Luck favors the prepared mind.’’ I favor heavily what I did. Friday afternoons for years - great thoughts only - means that I committed 10% of my time trying to understand the bigger problems in the field, i.e. what was and what was not important.
+I found in the early days I had believed `this’ and yet had spent all week marching in `that’ direction. It was kind of foolish. If I really believe the action is over there, why do I march in this direction? I either had to change my goal or change what I did. So I changed something I did and I marched in the direction I thought was important. It’s that easy.&lt;/p&gt;
+
+&lt;h1 id=&quot;is-the-effort-to-be-a-great-scientist-worth-ita-idsec-12-namesec-12a&quot;&gt;is the effort to be a great scientist worth it?&lt;a id=&quot;sec-12&quot; name=&quot;sec-12&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;’ To answer this, you must ask people. When you get beyond their modesty, most people will say, ``Yes, doing really first-class work, and knowing it, is as good as wine, women and song put together,’’ or if it’s a woman she says, ``It is as good as wine, men and song put together.’’
+I have never dared to go out and ask those who didn’t do great work how they felt about the matter. It’s a biased sample, but I still think it is worth the struggle. I think it is very definitely worth the struggle to try and do first-class work because the truth is, the value is in the struggle more than it is in the result. The struggle to make something of yourself seems to be worthwhile in itself. The success and fame are sort of dividends, in my opinion.&lt;/p&gt;
+
+&lt;h1 id=&quot;ive-told-you-how-to-do-it-it-is-so-easy-so-why-do-so-many-people-with-all-their-talents-faila-idsec-13-namesec-13a&quot;&gt;I’ve told you how to do it. It is so easy, so why do so many people, with all their talents, fail?&lt;a id=&quot;sec-13&quot; name=&quot;sec-13&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;one-of-the-reasons-is-drive-and-commitmenta-idsec-13-1-namesec-13-1a&quot;&gt;one of the reasons is drive and commitment.&lt;a id=&quot;sec-13-1&quot; name=&quot;sec-13-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;The people who do great work with less ability but who are committed to it, get more done that those who have great skill and dabble in it, who work during the day and go home and do other things and come back and work the next day. They don’t have the deep commitment that is apparently necessary for really first-class work&lt;/p&gt;
+
+&lt;h2 id=&quot;the-second-thing-is-i-think-the-problem-of-personality-defectsa-idsec-13-2-namesec-13-2a&quot;&gt;The second thing is, I think, the problem of personality defects.&lt;a id=&quot;sec-13-2&quot; name=&quot;sec-13-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;If you will learn to work with the system, you can go as far as the system will support you.’’ And, he never went any further. He had his personality defect of wanting total control and was not willing to recognize that you need the support of the system.
+good scientists will fight the system rather than learn to work with the system and take advantage of all the system has to offer. It has a lot, if you learn how to use it. It takes patience, but you can learn how to use the system pretty well, and you can learn how to get around it. After all, if you want a decision `No’, you just go to your boss and get a `No’ easy. If you want to do something, don’t ask, do it. Present him with an accomplished fact. Don’t give him a chance to tell you `No’. But if you want a `No’, it’s easy to get a `No’.&lt;/p&gt;
+
+&lt;h2 id=&quot;another-personality-defect-is-ego-assertiona-idsec-13-3-namesec-13-3a&quot;&gt;Another personality defect is ego assertion&lt;a id=&quot;sec-13-3&quot; name=&quot;sec-13-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;You should dress according to the expectations of the audience spoken to. If I am going to give an address at the MIT computer center, I dress with a bolo and an old corduroy jacket or something else. I know enough not to let my clothes, my appearance, my manners get in the way of what I care about. An enormous number of scientists feel they must assert their ego and do their thing their way. They have got to be able to do this, that, or the other thing, and they pay a steady price.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-it-comes-down-to-basically-is-that-you-cannot-be-original-in-one-area-without-having-originality-in-othersa-idsec-13-4-namesec-13-4a&quot;&gt;What it comes down to basically is that you cannot be original in one area without having originality in others.&lt;a id=&quot;sec-13-4&quot; name=&quot;sec-13-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Originality is being different. You can’t be an original scientist without having some other original characteristics. But many a scientist has let his quirks in other places make him pay a far higher price than is necessary for the ego satisfaction he or she gets. I’m not against all ego assertion; I’m against some.&lt;/p&gt;
+
+&lt;h2 id=&quot;another-fault-is-angera-idsec-13-5-namesec-13-5a&quot;&gt;Another fault is anger.&lt;a id=&quot;sec-13-5&quot; name=&quot;sec-13-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Often a scientist becomes angry, and this is no way to handle things. Amusement, yes, anger, no. Anger is misdirected. You should follow and cooperate rather than struggle against the system all the time.&lt;/p&gt;
+
+&lt;h2 id=&quot;another-thing-you-should-look-for-is-the-positive-side-of-things-instead-of-the-negativea-idsec-13-6-namesec-13-6a&quot;&gt;Another thing you should look for is the positive side of things instead of the negative&lt;a id=&quot;sec-13-6&quot; name=&quot;sec-13-6&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;I often put my pride on the line and sometimes I failed, but as I said, like a cornered rat I’m surprised how often I did a good job. I think you need to learn to use yourself. I think you need to know how to convert a situation from one view to another which would increase the chance of success.&lt;/p&gt;
+
+&lt;h2 id=&quot;now-self-delusion-in-humans-is-very-very-commona-idsec-13-7-namesec-13-7a&quot;&gt;Now self-delusion in humans is very, very common&lt;a id=&quot;sec-13-7&quot; name=&quot;sec-13-7&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;There are enumerable ways of you changing a thing and kidding yourself and making it look some other way. When you ask, ``Why didn’t you do such and such,’’ the person has a thousand alibis. If you look at the history of science, usually these days there are 10 people right there ready, and we pay off for the person who is there first. The other nine fellows say, ``Well, I had the idea but I didn’t do it and so on and so on.’’ There are so many alibis. Why weren’t you first? Why didn’t you do it right? Don’t try an alibi. Don’t try and kid yourself. You can tell other people all the alibis you want. I don’t mind. But to yourself try to be honest.&lt;/p&gt;
+
+&lt;h1 id=&quot;in-summary-i-claim-that-some-of-the-reasons-why-so-many-people-who-have-greatness-within-their-grasp-dont-succeed-area-idsec-14-namesec-14a&quot;&gt;in summary, I claim that some of the reasons why so many people who have greatness within their grasp don’t succeed are:&lt;a id=&quot;sec-14&quot; name=&quot;sec-14&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;they don’t work on important problems, they don’t become emotionally involved, they don’t try and change what is difficult to some other situation which is easily done but is still important, and they keep giving themselves alibis why they don’t. They keep saying that it is a matter of luck. I’ve told you how easy it is; furthermore I’ve told you how to reform. Therefore, go forth and become great scientists!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/03/13/you-and-your-research.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/03/13/you-and-your-research.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
+    
+  </channel>
+</rss>

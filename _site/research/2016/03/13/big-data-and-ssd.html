@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>big data and ssd</title>
+  <meta name="description" content="Table of Contents1. 讲道理：大数据处理框架的性能分析 《making sense of performance in data analytics frameworks》1.1. NSDI151.2. Abstract1.3. Introduction1.3.1. wide-accepted ...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://yourdomain.com/research/2016/03/13/big-data-and-ssd.html">
+  <link rel="alternate" type="application/rss+xml" title="Monumentality" href="http://yourdomain.com/feed.xml">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Monumentality</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">big data and ssd</h1>
+    <p class="post-meta"><time datetime="2016-03-13T00:00:00+08:00" itemprop="datePublished">Mar 13, 2016</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. 讲道理：大数据处理框架的性能分析 《making sense of performance in data analytics frameworks》</a>
+<ul>
+<li><a href="#sec-1-1">1.1. NSDI15</a></li>
+<li><a href="#sec-1-2">1.2. Abstract</a></li>
+<li><a href="#sec-1-3">1.3. Introduction</a>
+<ul>
+<li><a href="#sec-1-3-1">1.3.1. wide-accepted mantras about the performance of data analytics</a></li>
+<li><a href="#sec-1-3-2">1.3.2. two contributions</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-4">1.4. Methodology</a>
+<ul>
+<li><a href="#sec-1-4-1">1.4.1. workloads</a></li>
+<li><a href="#sec-1-4-2">1.4.2. framework architecture</a></li>
+<li><a href="#sec-1-4-3">1.4.3. blocked time analysis</a></li>
+<li><a href="#sec-1-4-4">1.4.4. cluster setup</a></li>
+<li><a href="#sec-1-4-5">1.4.5. production traces</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-5">1.5. How important is disk I/O?</a>
+<ul>
+<li><a href="#sec-1-5-1">1.5.1. measuring time blocked on disk I/O at four different points in task execution:</a></li>
+<li><a href="#sec-1-5-2">1.5.2. summary</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-6">1.6. How important is the network?</a>
+<ul>
+<li><a href="#sec-1-6-1">1.6.1. why isn't the network more important?</a></li>
+<li><a href="#sec-1-6-2">1.6.2. are these results inconsistent with past work?</a></li>
+<li><a href="#sec-1-6-3">1.6.3. summary</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-7">1.7. The role of Stragglers</a>
+<ul>
+<li><a href="#sec-1-7-1">1.7.1. how much do stagglers affect job completion time?</a></li>
+<li><a href="#sec-1-7-2">1.7.2. Are these results inconsistent with prior work?</a></li>
+<li><a href="#sec-1-7-3">1.7.3. why do stragglers occur?</a></li>
+<li><a href="#sec-1-7-4">1.7.4. Improving performance by understanding stragglers</a></li>
+<li><a href="#sec-1-7-5">1.7.5. How Does Scale Affect Results?</a></li>
+</ul>
+</li>
+<li><a href="#sec-1-8">1.8. How Does Scale Affect Results?</a></li>
+<li><a href="#sec-1-9">1.9. Conclusion</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. Tachyon: Reliable, Memory Speed Storage for Cluster Computing Frameworks</a>
+<ul>
+<li><a href="#sec-2-1">2.1. SoCC 14</a></li>
+<li><a href="#sec-2-2">2.2. Abstract</a></li>
+<li><a href="#sec-2-3">2.3. introduction</a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1. tow challenges:</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-4">2.4. background</a></li>
+<li><a href="#sec-2-5">2.5. design overview</a></li>
+<li><a href="#sec-2-6">2.6. chekpointing</a></li>
+<li><a href="#sec-2-7">2.7. resource allocation</a></li>
+<li><a href="#sec-2-8">2.8. implementation</a></li>
+<li><a href="#sec-2-9">2.9. evaluation</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. Introducing SSDs to the Hadoop MapReduce Framework</a>
+<ul>
+<li><a href="#sec-3-1">3.1. Cloud Computing 14</a></li>
+<li><a href="#sec-3-2">3.2. Abstract</a></li>
+<li><a href="#sec-3-3">3.3. Introduction</a>
+<ul>
+<li><a href="#sec-3-3-1">3.3.1. contributions</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-4">3.4. HDFS characteristics</a>
+<ul>
+<li><a href="#sec-3-4-1">3.4.1. investigate environment</a></li>
+<li><a href="#sec-3-4-2">3.4.2. storage vs Network</a></li>
+<li><a href="#sec-3-4-3">3.4.3. Mutiple Readers/Writers</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-5">3.5. MapReduce from a Storage Perspective</a>
+<ul>
+<li><a href="#sec-3-5-1">3.5.1. Terasort Performance Analysis</a></li>
+<li><a href="#sec-3-5-2">3.5.2. Cost Analysis</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-6">3.6. Conclusion</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4. FB-Tree: A B+-Tree for Flash-Based SSDs</a>
+<ul>
+<li><a href="#sec-4-1">4.1. IDEAS11 2011</a></li>
+<li><a href="#sec-4-2">4.2. Abstract</a></li>
+<li><a href="#sec-4-3">4.3. Introduction</a>
+<ul>
+<li><a href="#sec-4-3-1">4.3.1. key features of SSD</a></li>
+<li><a href="#sec-4-3-2">4.3.2. contribution of this paper is two-fold</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-4">4.4. Motivation</a>
+<ul>
+<li><a href="#sec-4-4-1">4.4.1. SSD's rather similar sequential and random read speeds</a></li>
+<li><a href="#sec-4-4-2">4.4.2. the performance of the write workloads has the potential to be improved.</a></li>
+</ul>
+</li>
+<li><a href="#sec-4-5">4.5. Related Work</a></li>
+<li><a href="#sec-4-6">4.6. FB-Tree</a>
+<ul>
+<li><a href="#sec-4-6-1">4.6.1. write-optimized B-tree</a></li>
+<li><a href="#sec-4-6-2">4.6.2. storage manager</a></li>
+<li><a href="#sec-4-6-3">4.6.3. Buffer Manager</a></li>
+<li><a href="#sec-4-6-4">4.6.4. conclusion</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-5">5. Conclusion</a></li>
+<li><a href="#sec-6">6. 问题：</a></li>
+</ul>
+</div>
+</div>
+
+<h1 id="making-sense-of-performance-in-data-analytics-frameworksa-idsec-1-namesec-1a">讲道理：大数据处理框架的性能分析 《making sense of performance in data analytics frameworks》<a id="sec-1" name="sec-1"></a></h1>
+
+<h2 id="nsdi15a-idsec-1-1-namesec-1-1a">NSDI15<a id="sec-1-1" name="sec-1-1"></a></h2>
+
+<h2 id="abstracta-idsec-1-2-namesec-1-2a">Abstract<a id="sec-1-2" name="sec-1-2"></a></h2>
+
+<p>There has been much research devoted to improving the performance of data analytics frameworks, but comparatively little effort has been spent systematically identifying the performance bottlenecks of these systems.</p>
+
+<p>Contrary to our expectations, we find that (i) CPU (and not I/O) is often the bottleneck, (ii)improving network performance can improve job completion time by a median of at most 2%, and (iii) the causes of most stragglers can be identified.</p>
+
+<h2 id="introductiona-idsec-1-3-namesec-1-3a">Introduction<a id="sec-1-3" name="sec-1-3"></a></h2>
+
+<h3 id="wide-accepted-mantras-about-the-performance-of-data-analyticsa-idsec-1-3-1-namesec-1-3-1a">wide-accepted mantras about the performance of data analytics<a id="sec-1-3-1" name="sec-1-3-1"></a></h3>
+
+<p>The network is a bottleneck</p>
+
+<p>The disk is a bottleneck.</p>
+
+<p>Straggler tasks significantly prolong job completion times and have largely unknown underlying causes.</p>
+
+<h3 id="two-contributionsa-idsec-1-3-2-namesec-1-3-2a">two contributions<a id="sec-1-3-2" name="sec-1-3-2"></a></h3>
+
+<ol>
+  <li>
+    <p>blocked time analysis</p>
+
+    <p>Blocked time analysis uses extensive white-box logging to measure how long each task spends blocked on a given resource.</p>
+
+    <p>Taken alone, these per-task measurements allow us to understand straggler causes by correlating slow tasks with long blocked times</p>
+
+    <p>Taken together, the per-task measurements for a particular job allow us to simulate how long the job would have taken to complete if the disk or network were infinitely fast, which provides an upper bound on the benefit of optimizing network or disk performance.</p>
+  </li>
+  <li>
+    <p>using blocked time analysis to understand Spark’s performance on two industry benchmarks and one production workload</p>
+
+    <p>Network optimizations can only reduce job completion time by a median of at most 2%.</p>
+
+    <p>Optimizing or eliminating disk accesses can only reduce job completion time by a median of at most 19%.</p>
+
+    <p>Optimizing stragglers can only reduce job completion time by a median of at most 10%, and in 75%of queries, we can identify the cause of more than 60% of stragglers.</p>
+
+    <p>Blocked-time analysis illustrates that the two leading causes of Spark stragglers are Java’s garbage collection and time to transfer data to and from disk.</p>
+  </li>
+</ol>
+
+<h2 id="methodologya-idsec-1-4-namesec-1-4a">Methodology<a id="sec-1-4" name="sec-1-4"></a></h2>
+
+<h3 id="workloadsa-idsec-1-4-1-namesec-1-4-1a">workloads<a id="sec-1-4-1" name="sec-1-4-1"></a></h3>
+
+<h3 id="framework-architecturea-idsec-1-4-2-namesec-1-4-2a">framework architecture<a id="sec-1-4-2" name="sec-1-4-2"></a></h3>
+
+<h3 id="blocked-time-analysisa-idsec-1-4-3-namesec-1-4-3a">blocked time analysis<a id="sec-1-4-3" name="sec-1-4-3"></a></h3>
+
+<ol>
+  <li>
+    <p>instrumentation</p>
+
+    <ol>
+      <li>
+        <p>logging</p>
+
+        <p>Obtaining the measurements shown in Figure 1(b) required significant improvements to the instrumentation in Spark and in HDFS.While some of the instrumentation required was already available in Spark, our detailed performance analysis revealed that existing logging was often incorrect or incomplete [33–36, 38, 44]. Where necessary, we fixed existing logging and pushed the changes upstream to Spark.</p>
+      </li>
+      <li>
+        <p>cross validation</p>
+
+        <p>We found that cross validationwas crucial to validating that our measurements were correct. In addition to instrumentation for blocked time, we also added instrumentation about the CPU, network, and disk utilization on the machine while the task was running (per-task utilization cannot be measured in Spark, because all tasks run in a single process). Utilization measurements allowed us to cross validate blocked times; for example, by ensuring that when tasks spent little time blocked on I/O, CPU utilization was correspondingly high.</p>
+      </li>
+      <li>
+        <p>no side effect</p>
+
+        <p>As part of adding instrumentation, we measured Spark’s performance before and after the instrumentation was added to ensure the instrumentation did not add to job completion time.</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>simulation</p>
+  </li>
+</ol>
+
+<h3 id="cluster-setupa-idsec-1-4-4-namesec-1-4-4a">cluster setup<a id="sec-1-4-4" name="sec-1-4-4"></a></h3>
+
+<h3 id="production-tracesa-idsec-1-4-5-namesec-1-4-5a">production traces<a id="sec-1-4-5" name="sec-1-4-5"></a></h3>
+
+<h2 id="how-important-is-disk-ioa-idsec-1-5-namesec-1-5a">How important is disk I/O?<a id="sec-1-5" name="sec-1-5"></a></h2>
+
+<h3 id="measuring-time-blocked-on-disk-io-at-four-different-points-in-task-executiona-idsec-1-5-1-namesec-1-5-1a">measuring time blocked on disk I/O at four different points in task execution:<a id="sec-1-5-1" name="sec-1-5-1"></a></h3>
+
+<ol>
+  <li>
+    <p>Reading input data stored on-disk</p>
+
+    <p>(this only applies for the on-disk workloads; in-memory workloads read input from memory).</p>
+  </li>
+  <li>
+    <p>Writing shuffle data to disk.</p>
+
+    <p>Spark writes all shuffle data to disk, even when input data is read from memory.</p>
+  </li>
+  <li>
+    <p>Reading shuffle data from a remote disk.</p>
+
+    <p>This time includes both disk time (to read data from disk) and network time (to send the data over the network).Network and disk use is tightly coupled and thus challenging to measure separately; we measure the total time as an upper bound on the improvement from optimizing disk performance.</p>
+  </li>
+  <li>
+    <p>Writing output data to local disk and two remote disks</p>
+
+    <p>(this only applies for the on-disk workloads). Again, the time to write data to remote disks includes network time as well; we measure both the network and disk time, making our results an upper bound on the improvement from optimizing disk.</p>
+  </li>
+</ol>
+
+<h3 id="summarya-idsec-1-5-2-namesec-1-5-2a">summary<a id="sec-1-5-2" name="sec-1-5-2"></a></h3>
+
+<p>We found that job runtime cannot improve by more than 19% as a result of optimizing disk I/O. To shed more light on this measurement,we compared resource utilization while tasks were running, and found that CPU utilization is typically close to 100% whereas median disk utilization is at most 25%.</p>
+
+<p>One reason for the relatively high use of CPU by the analytics workloads we studied is deserialization and compression</p>
+
+<p>Serialization and compression formats will inevitably evolve in the future, rendering the numbers presented in this paper obsolete.</p>
+
+<h2 id="how-important-is-the-networka-idsec-1-6-namesec-1-6a">How important is the network?<a id="sec-1-6" name="sec-1-6"></a></h2>
+
+<p>Our blocked time instrumentation for the network included time to read shuffle data over the network, and for on-diskworkloads, the time to write output data to one local machine and two remote machines.</p>
+
+<p>Both of these times include disk use as well as network use, because disk and network are interlaced in a manner that makes them difficult to measure separately. As a result, 2% represents an upper bound on the possible improvement from network optimizations.</p>
+
+<h3 id="why-isnt-the-network-more-importanta-idsec-1-6-1-namesec-1-6-1a">why isn’t the network more important?<a id="sec-1-6-1" name="sec-1-6-1"></a></h3>
+
+<p>One reason that network performance is relatively unimportant is that the amount of data sent over the network is often much less than the data transferred to disk, because analytics queries often shuffle and output much less data than they read.</p>
+
+<h3 id="are-these-results-inconsistent-with-past-worka-idsec-1-6-2-namesec-1-6-2a">are these results inconsistent with past work?<a id="sec-1-6-2" name="sec-1-6-2"></a></h3>
+
+<ol>
+  <li>
+    <p>overestimate</p>
+
+    <p>We instrumented Hadoop to log time spent writing output data and ran the big data benchmark (using Hive to convert SQL queries to Map Reduce jobs) and compared the result from the detailed instrumentation to the estimation previously used. Unfortunately, as shown in Figure 11, the previously used metric significantly overestimates time spent writing output data, meaning that the importance of the network was significantly overestimated.</p>
+  </li>
+  <li>
+    <p>inefficiencies in hadoop</p>
+
+    <p>A second problem with past estimations of the importance of the network is that they have conflated inefficiencies in Hadoop with network performance problems.</p>
+  </li>
+</ol>
+
+<h3 id="summarya-idsec-1-6-3-namesec-1-6-3a">summary<a id="sec-1-6-3" name="sec-1-6-3"></a></h3>
+
+<p>One reason network performance has little effect on job completion time is that the data transferred over the network is a subset of data transferred to disk, so jobs bottleneck on the disk before bottlenecking on the network.</p>
+
+<h2 id="the-role-of-stragglersa-idsec-1-7-namesec-1-7a">The role of Stragglers<a id="sec-1-7" name="sec-1-7"></a></h2>
+
+<h3 id="how-much-do-stagglers-affect-job-completion-timea-idsec-1-7-1-namesec-1-7-1a">how much do stagglers affect job completion time?<a id="sec-1-7-1" name="sec-1-7-1"></a></h3>
+
+<p>the median improvement from eliminating stragglers is 5-10% for the big data benchmark and TPC-DS workloads, and lower for the productionworkloads, which had fewer stragglers.</p>
+
+<h3 id="are-these-results-inconsistent-with-prior-worka-idsec-1-7-2-namesec-1-7-2a">Are these results inconsistent with prior work?<a id="sec-1-7-2" name="sec-1-7-2"></a></h3>
+
+<h3 id="why-do-stragglers-occura-idsec-1-7-3-namesec-1-7-3a">why do stragglers occur?<a id="sec-1-7-3" name="sec-1-7-3"></a></h3>
+
+<p>Our instrumentation allows us to describe the cause of more than 60% of stragglers in 75% of the queries we ran.</p>
+
+<p>common patterns are that garbage collection can cause most of the stragglers for some queries, and many stragglers can be attributed to long times spent reading to or writing from disk (this is not inconsistent with our earlier results showing a 19% median improvement from eliminating disk: the fact that some straggler tasks are caused by long times spent)</p>
+
+<h3 id="improving-performance-by-understanding-stragglersa-idsec-1-7-4-namesec-1-7-4a">Improving performance by understanding stragglers<a id="sec-1-7-4" name="sec-1-7-4"></a></h3>
+
+<p>Understanding the root cause behind stragglers provides ways to improve performance by mitigating the underlying cause. In our early experiments, investigating straggler causes led us to find that the default file system on the EC2 instances we used, ext3, performs poorly for workloads with large numbers of parallel reads and writes, leading to stragglers. By changing the filesystem to ext4, we fixed stragglers and reduced median task time, reducing query runtime for queries in the big data benchmark by 17−58%</p>
+
+<h3 id="how-does-scale-affect-resultsa-idsec-1-7-5-namesec-1-7-5a">How Does Scale Affect Results?<a id="sec-1-7-5" name="sec-1-7-5"></a></h3>
+
+<h2 id="how-does-scale-affect-resultsa-idsec-1-8-namesec-1-8a">How Does Scale Affect Results?<a id="sec-1-8" name="sec-1-8"></a></h2>
+
+<p>similar results</p>
+
+<h2 id="conclusiona-idsec-1-9-namesec-1-9a">Conclusion<a id="sec-1-9" name="sec-1-9"></a></h2>
+
+<p>This paper undertook a detailed performance study of three workloads, and found that for those workloads, jobs are often bottlenecked on CPU and not I/O, network performance has little impact on job completion time, and many straggler causes can be identified and fixed.</p>
+
+<h1 id="tachyon-reliable-memory-speed-storage-for-cluster-computing-frameworksa-idsec-2-namesec-2a">Tachyon: Reliable, Memory Speed Storage for Cluster Computing Frameworks<a id="sec-2" name="sec-2"></a></h1>
+
+<h2 id="socc-14a-idsec-2-1-namesec-2-1a">SoCC 14<a id="sec-2-1" name="sec-2-1"></a></h2>
+
+<h2 id="abstracta-idsec-2-2-namesec-2-2a">Abstract<a id="sec-2-2" name="sec-2-2"></a></h2>
+
+<p>While caching today improves read workloads, writes are either network or disk bound, as replication is used for fault-tolerance. Tachyon eliminates this bottleneck by pushing lineage, a well-known technique, into the storage layer.</p>
+
+<p>Our evaluation shows that Tachyon outperforms in-memory HDFS by 110x for writes.It also improves the end-to-end latency of a realistic
+workflow by 4x.</p>
+
+<h2 id="introductiona-idsec-2-3-namesec-2-3a">introduction<a id="sec-2-3" name="sec-2-3"></a></h2>
+
+<p>As the performance of many of these systems is I/O bound, traditional means of improving their speed is to cache data into memory.</p>
+
+<p>To improve write performance, we present Tachyon, an in-memory storage system that achieves high throughput writes and reads, without compromising fault-tolerance.</p>
+
+<h3 id="tow-challengesa-idsec-2-3-1-namesec-2-3-1a">tow challenges:<a id="sec-2-3-1" name="sec-2-3-1"></a></h3>
+
+<ol>
+  <li>
+    <p>bounding the recomputation cost for a long-running storage system.</p>
+
+    <p>checkpoiont + linage, no replication</p>
+
+    <p>Tachyon bounds the data recomputation cost, thus addressing the first challenge, by continuously checkpointing files asynchronously in the background. To select which files to checkpoint and when, we propose a novel algorithm, called the Edge algorithm, that provides an upper bound on the recomputation cost regardless of the workload’s access pattern.</p>
+  </li>
+  <li>
+    <p>how to allocate resources for recomputations</p>
+
+    <p>Tachyon provides resource allocation schemes that respect job priorities under two common cluster allocation models: strict priority and
+weighted fair sharing [31, 52].</p>
+  </li>
+</ol>
+
+<h2 id="backgrounda-idsec-2-4-namesec-2-4a">background<a id="sec-2-4" name="sec-2-4"></a></h2>
+
+<h2 id="design-overviewa-idsec-2-5-namesec-2-5a">design overview<a id="sec-2-5" name="sec-2-5"></a></h2>
+
+<h2 id="chekpointinga-idsec-2-6-namesec-2-6a">chekpointing<a id="sec-2-6" name="sec-2-6"></a></h2>
+
+<h2 id="resource-allocationa-idsec-2-7-namesec-2-7a">resource allocation<a id="sec-2-7" name="sec-2-7"></a></h2>
+
+<h2 id="implementationa-idsec-2-8-namesec-2-8a">implementation<a id="sec-2-8" name="sec-2-8"></a></h2>
+
+<h2 id="evaluationa-idsec-2-9-namesec-2-9a">evaluation<a id="sec-2-9" name="sec-2-9"></a></h2>
+
+<h1 id="introducing-ssds-to-the-hadoop-mapreduce-frameworka-idsec-3-namesec-3a">Introducing SSDs to the Hadoop MapReduce Framework<a id="sec-3" name="sec-3"></a></h1>
+
+<h2 id="cloud-computing-14a-idsec-3-1-namesec-3-1a">Cloud Computing 14<a id="sec-3-1" name="sec-3-1"></a></h2>
+
+<h2 id="abstracta-idsec-3-2-namesec-3-2a">Abstract<a id="sec-3-2" name="sec-3-2"></a></h2>
+
+<p>This paper compares SSD performance to HDD performance within a Hadoop MapReduce framework. It identifies extensible best practices that can exploit SSD benefits within Hadoop frameworks when combined with high network bandwidth and increased parallel storage access.</p>
+
+<p>Terasort benchmark results demonstrate that SSDs presently deliver significant costeffectiveness when they store intermediate Hadoop data, leaving HDDs to store Hadoop Distributed File System (HDFS) source data.</p>
+
+<h2 id="introductiona-idsec-3-3-namesec-3-3a">Introduction<a id="sec-3-3" name="sec-3-3"></a></h2>
+
+<p>While many options and strategies can improve MapReduce performance, introducing SSDs is a particularly attractive strategy because SSDs typically exhibit superior performance - lower latency, higher IO rates, and higher throughput - than HDDs.</p>
+
+<h3 id="contributionsa-idsec-3-3-1-namesec-3-3-1a">contributions<a id="sec-3-3-1" name="sec-3-3-1"></a></h3>
+
+<p>We investigate and compare HDFS performance using SSDs and HDDs in different configurations</p>
+
+<p>We examine Hadoop workflows and identify various performance bottlenecks within different configurations.</p>
+
+<p>We explore cost-effective MapReduce configurations.</p>
+
+<h2 id="hdfs-characteristicsa-idsec-3-4-namesec-3-4a">HDFS characteristics<a id="sec-3-4" name="sec-3-4"></a></h2>
+
+<h3 id="investigate-environmenta-idsec-3-4-1-namesec-3-4-1a">investigate environment<a id="sec-3-4-1" name="sec-3-4-1"></a></h3>
+
+<ol>
+  <li>
+    <p>Raw Storage Device Performance</p>
+
+    <p>We used the fio benchmark with the following options: (1) queue depth = 32, (2) 128KB block size, (3) sync I/O, and (4) direct I/O. System engineers typically allow enough queue depth since block device drivers significantly delay overall I/O performance with small queue depth. We found that configurations with queue depth more than 32 or with block size more than 128KB marginally changed the result.</p>
+  </li>
+  <li>
+    <p>TestDFSIO</p>
+
+    <p>Test Distributed File System I/O (TestDFSIO, here after DFSIO) is a widely-used, industry-standard benchmark that enables HDFS performance benchmarks. It distributes map tasks that read/write complete dummy data files on Datanodes for HDFS. Each map task reads the complete local file and writes a few statistical output lines. Reduce tasks simply gather the statistics for output</p>
+  </li>
+</ol>
+
+<h3 id="storage-vs-networka-idsec-3-4-2-namesec-3-4-2a">storage vs Network<a id="sec-3-4-2" name="sec-3-4-2"></a></h3>
+
+<p>We performed HDFS performance measurements using 1Gbit Ethernet links, 20Gbit links constructed by combining two 10Gbit Ethernet links via link aggregation (channel bonding), HDDs, and, SSDs. This enabled us to vary storage devices and network bandwidth to determine how various SSD and high network bandwidth combinations could improve throughput.</p>
+
+<p>Employing more HDDs or SSDs can utilize the potential of high performance networks. Consequently, matching network bandwidth and I/O throughput is key to build cost-efficient system.</p>
+
+<ol>
+  <li>
+    <p>Network bandwidth requirement for high performance storage systems</p>
+
+    <p>KT = ND</p>
+
+    <p>0.5KB &gt;= D(N-1)</p>
+  </li>
+</ol>
+
+<h3 id="mutiple-readerswritersa-idsec-3-4-3-namesec-3-4-3a">Mutiple Readers/Writers<a id="sec-3-4-3" name="sec-3-4-3"></a></h3>
+
+<p>Unlike when using HDDs, increasing the concurrent thread count improves HDFS performance when using SSDs because random SSD read performance approximates sequential read performance (the highest possible performance).</p>
+
+<h2 id="mapreduce-from-a-storage-perspectivea-idsec-3-5-namesec-3-5a">MapReduce from a Storage Perspective<a id="sec-3-5" name="sec-3-5"></a></h2>
+
+<p>The place to write intermediate data is configurable. We call the local storage keeping intermediate data intermediate storage.</p>
+
+<p>Compressing map output is often used to reduce the amount of data stored in the intermediate storage (and transferred through the cluster network)</p>
+
+<h3 id="terasort-performance-analysisa-idsec-3-5-1-namesec-3-5-1a">Terasort Performance Analysis<a id="sec-3-5-1" name="sec-3-5-1"></a></h3>
+
+<p>Key Terasort performance observations are:</p>
+
+<p>(1) Map phase performance depends on the performance of HDFS read throughput (primarily sequential).</p>
+
+<p>(2) Shuffle phase performance mainly depends on the random I/O performance when reading map output and writing intermediate data. To explicitly identify performance-degradation sources, we profiled CPU and I/O utilizations during investigations, depicted in Figure 8 and 9.</p>
+
+<p>(3) Reduce phase performance depends more on the random read performance of the storage keeping intermediate data than on the HDFS storage media performance.</p>
+
+<h3 id="cost-analysisa-idsec-3-5-2-namesec-3-5-2a">Cost Analysis<a id="sec-3-5-2" name="sec-3-5-2"></a></h3>
+
+<p>The previous section’s Terasort evaluation shows that introducing more DRAM or an SSD to Datanodes as intermediate data storage significantly reduces shuffle phase execution time. When also deploying SSDs as permanent HDFS storage, Hadoop map and reduce phase performance considerably improves.</p>
+
+<p>However, SSD cost-per-bit is presently not inexpensive enough to replace all HDDs. Nevertheless, it is still rapidly decreasing. To estimate Datanode cost-effectiveness, we considered both Datanode configuration cost and Datanode performance.</p>
+
+<h2 id="conclusiona-idsec-3-6-namesec-3-6a">Conclusion<a id="sec-3-6" name="sec-3-6"></a></h2>
+
+<p>Sufficient network bandwidth and more I/O parallelism to utilize the maximum SSD performance are critical to the performance of HDFS and Hadoop MapReduce framework.</p>
+
+<p>Specifically, SSDs help when they are used as temporary storage for intermediate data which consists of heavy random and concurrent I/O. We observed that using SSDs for temporary storage and HDDs for permanent storage for HDFS is the most cost effective configuration today.</p>
+
+<h1 id="fb-tree-a-b-tree-for-flash-based-ssdsa-idsec-4-namesec-4a">FB-Tree: A B+-Tree for Flash-Based SSDs<a id="sec-4" name="sec-4"></a></h1>
+
+<h2 id="ideas11-2011a-idsec-4-1-namesec-4-1a">IDEAS11 2011<a id="sec-4-1" name="sec-4-1"></a></h2>
+
+<p>Proceedings of the 15th Symposium on International Database Engineering &amp; Applications</p>
+
+<h2 id="abstracta-idsec-4-2-namesec-4-2a">Abstract<a id="sec-4-2" name="sec-4-2"></a></h2>
+
+<p>ash-based SSDs (Solid-State Drives) have become a mainstream alternative to magnetic disks for database servers.</p>
+
+<p>Nevertheless, database systems, designed and optimized for magnetic disks, still do not fully exploit all the benets of the new technology</p>
+
+<p>We propose the FB-tree: a combination of an adapted B+- tree, a storage manager, and a buer manager, all optimized for modern SSDs.* SSD usage in Facebook.</p>
+
+<p>Together the techniques enable writing to SSDs in relatively large blocks, thus achieving greater overall throughput. This is achieved by the out-of-place writing, whereby every time a modied index node is written, it is written to a new address, clustered with some other nodes that are written together.</p>
+
+<p>While this constantly frees index nodes, the FB-tree does not introduce any garbage-collection overhead, instead relying on naturally occurring free-space segments of sufficient size.</p>
+
+<p>As a consequence, the FB-tree outperforms a regular B+-tree in all scenarios tested. For instance, the throughput of a random workload of 75% updates increases by a factor of three using only two times the space of the B+-tree.</p>
+
+<h2 id="introductiona-idsec-4-3-namesec-4-3a">Introduction<a id="sec-4-3" name="sec-4-3"></a></h2>
+
+<p>At first, NAND  flash was intended for embedded storage, where its small size and low power consumption were the key benets.</p>
+
+<p>In recent years, NAND flash storage has emerged into the world of mainstream storage, where its fast random access and low power consumption are considered its key benets.</p>
+
+<p>In present database systems, most aspects are optimized with respect to the performance characteristics of magnetic disks, and hence these optimizations must be reconsidered [6, 8, 19].</p>
+
+<p>One of the key parts of the data base internals that have to be reconsidered are the index methods and especially the ubiquitous B+-tree index structure.</p>
+
+<p>proposals successfully enforcing a sequential workload of writes, either severely degrade the other properties of the existing B+-tree , or completely redesign the index structure [9, 20], making it difficult to implement and integrate with the existing systems.</p>
+
+<h3 id="key-features-of-ssda-idsec-4-3-1-namesec-4-3-1a">key features of SSD<a id="sec-4-3-1" name="sec-4-3-1"></a></h3>
+
+<table>
+  <tbody>
+    <tr>
+      <td>in this paper, we embrace two key features of SSDs</td>
+      <td>very fast random reads and the fact that larger writes are more efficient than smaller ones.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="contribution-of-this-paper-is-two-folda-idsec-4-3-2-namesec-4-3-2a">contribution of this paper is two-fold<a id="sec-4-3-2" name="sec-4-3-2"></a></h3>
+
+<p>First, we propose the adaptation of the write-optimized B-tree for SSDs by combining it with the specially designed buffer manager and storage manager. The combination, which we term the FB-tree, enables to improve the performance of any query/update workloads and does so with only slight 34 modications to the well known B+-tree.</p>
+
+<p>Second, we report on extensive experimental study of the FB-tree and the B+-tree on modern SSDs.</p>
+
+<h2 id="motivationa-idsec-4-4-namesec-4-4a">Motivation<a id="sec-4-4" name="sec-4-4"></a></h2>
+
+<h3 id="ssds-rather-similar-sequential-and-random-read-speedsa-idsec-4-4-1-namesec-4-4-1a">SSD’s rather similar sequential and random read speeds<a id="sec-4-4-1" name="sec-4-4-1"></a></h3>
+
+<p>Hence, we discard clustering on SSDs. Removing this legacy optimization from the B+-tree indexing scheme opens up for other possible SSD optimizations, as no special placement of pages is required for getting a fast range scan.</p>
+
+<h3 id="the-performance-of-the-write-workloads-has-the-potential-to-be-improveda-idsec-4-4-2-namesec-4-4-2a">the performance of the write workloads has the potential to be improved.<a id="sec-4-4-2" name="sec-4-4-2"></a></h3>
+
+<p>With a workload of random writes of 4{8KB caused by updating the B+-tree nodes in-place, an SSD will perform its absolute worst.</p>
+
+<p>To improve on the write performance, a solution would be to write in larger sizes or ultimately write large sequential writes, and, notably, this has been the main concern when optimizing the B+-tree workloads or building new indexing schemes for flash and SSDs [9, 19, 20].</p>
+
+<p>The SSD incurs somewhat the same trend but on a much smaller scale. The results are, however, encouraging enough to be used for improving the write workload of a B+-tree on an SSD.</p>
+
+<p>With the combined fact that the placement of nodes in a B+-tree structure is no longer restricted by clustering and that performing relatively large writes improves performance.</p>
+
+<p>we propose the FB-tree, which is a B+-tree indexing scheme where nodes are written in an out-of-place fashion also called copy-on-write.</p>
+
+<h2 id="related-worka-idsec-4-5-namesec-4-5a">Related Work<a id="sec-4-5" name="sec-4-5"></a></h2>
+
+<h2 id="fb-treea-idsec-4-6-namesec-4-6a">FB-Tree<a id="sec-4-6" name="sec-4-6"></a></h2>
+
+<p>First, we present the write-optimized B-tree , which is theB+-tree variant we choose as a basis of our proposal.</p>
+
+<p>Next, we introduce our algorithms for the storage manager and the buffer manager.</p>
+
+<h3 id="write-optimized-b-treea-idsec-4-6-1-namesec-4-6-1a">write-optimized B-tree<a id="sec-4-6-1" name="sec-4-6-1"></a></h3>
+
+<ol>
+  <li>
+    <p>original paper</p>
+
+    <p>G. Graefe. Write-Optimized B-Trees. In proc. of VLDB, pp. 672{683, 2004.}</p>
+  </li>
+  <li>
+    <p>algorithm</p>
+
+    <p>The main idea behind the write-optimized B-tree is borrowed from the log-structured le systems (LFS ), where every piece of data is written in a out-of-place fashion, collecting smaller writes into larger writes.</p>
+
+    <p>In a normal LFS, writing out-of-place requires maintaining a mapping between a stable logical address and a frequently changing physical addresse.</p>
+
+    <p>While this overhead is required for a le system, not having any control over the overlying data structure, the overhead can be diminished by instead incorporating the mapping into the index structure.</p>
+
+    <p>While the write-optimized B-tree enables out-of-place writes, they do not automatically guarantee that a large group of such writes can be collected into a single large write. Careful consideration of the algorithms of the storage manager and the buer manager are necessary.</p>
+  </li>
+</ol>
+
+<h3 id="storage-managera-idsec-4-6-2-namesec-4-6-2a">storage manager<a id="sec-4-6-2" name="sec-4-6-2"></a></h3>
+
+<p>While for disk-based systems, storage manager main contain algorithms for defragmentation or reorganization of nodes to improve reading performance, this is an unnecessary overhead for SSDs. For modern SSDs, the recommended disk scheduling and le system optimization is \no optimization” [2, 3].”</p>
+
+<p>With this in mind we propose a simple storage manager that incurs no I/O overhead. The idea is to perform relatively large writes as much as possible. Thus, the storage manager manages the free space so that several nodes can be written at a time, claiming a relatively large chunk of free space. The simple policy is to choose the largest naturally occurring free space segment and write as many evicted nodes as possible contiguously in this segment.</p>
+
+<p>One benefit of out-of-place writing is the possibility of exploiting the fact that B-tree nodes are not completely filled (approximately 68% on average ).</p>
+
+<p>As evicted nodes can be of dierent sizes, the group of evicted nodes does not always t perfectly into the largest free space segment, possibly leaving some space in the segment unused. This potentially causes further unnecessary fragmentation, and hence, we propose to use a rened policy, the so-called exact t, which includes searching for a segment of free space that serves as the best t, leaving as little wasted space as possible. Such a segment of free space may not necessarily be the largest one*** buffer manager.</p>
+
+<p>As the storage manager in FB-tree does not perform any defragmentation of nodes and free space, the amount of free space is especially important for maintaining a high probability of large free space segments</p>
+
+<h3 id="buffer-managera-idsec-4-6-3-namesec-4-6-3a">Buffer Manager<a id="sec-4-6-3" name="sec-4-6-3"></a></h3>
+
+<p>Probably the best-known buering mechanism is the Least-Recently-Used (LRU) buer, which simply evicts the page least recently used.</p>
+
+<p>Treating buffer reads and buffer writes differently is motivated by the asymmetric performance of read and write on flash and SSDs, when reads are faster than writes.</p>
+
+<p>As a consequence, proposals have been made [13, 14] for different flash-friendly replacement policies, the main idea of which is evicting clean pages before dirty pages.</p>
+
+<p>What makes the proposed buffering mechanism significantly different from the other flash-optimized buffer managers, is the ability to evict several dirty pages at a time</p>
+
+<h3 id="conclusiona-idsec-4-6-4-namesec-4-6-4a">conclusion<a id="sec-4-6-4" name="sec-4-6-4"></a></h3>
+
+<p>In the future, we plan to explore the concurrency algorithms of the FB-tree</p>
+
+<h1 id="conclusiona-idsec-5-namesec-5a">Conclusion<a id="sec-5" name="sec-5"></a></h1>
+
+<p>第一篇论文《大数据处理框架的性能分析》为我们的研究提供了性能分析工具</p>
+
+<p>这几篇论文的性能分析，实验方法我们可以模仿</p>
+
+<p>tachyon的论文原文没有提它对于大数据分析的提升效果，因为理论上和实际上应该提升并不大，tachyon的商业公司的宣传不能信</p>
+
+<p>tachyon把shuffle阶段的中间数据放在内存文件系统，不符合大数据处理追求高性价比的初衷</p>
+
+<p>另一些研究把shuffle阶段的中间数据放在SSD上，性价比更高，很关键！</p>
+
+<h1 id="a-idsec-6-namesec-6a">问题：<a id="sec-6" name="sec-6"></a></h1>
+
+<p>为什么spark把shuffle中间数据放到磁盘上？</p>
+
+<p>shuffle阶段的策略和算法还可以优化，有需要sort的，也有不需要sort的；不需要sort的应用直接使用hash table</p>
+
+<p>不能把中间数据放到SSD上就完了，应当使用为SSD优化过的数据结构，例如FB-Tree</p>
+
+<p>集群配置：网络吞吐量和磁盘吞吐量如何最优化配置？</p>
+
+<p>使用本地存储如hdfs和统一外部存储如S3，对于网络吞吐量和性价比的影响</p>
+
+<p>压缩shuffle阶段中间数据对于性能的影响？能否通过压缩提升io密集型应用的性能？</p>
+
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p>DEFINITION NOT FOUND.</p></div>
+
+
+</div>
+</div>
+
+  </div>
+
+</article>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Monumentality</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Augustin Mars</li>
+          <li><a href="mailto:augustin.programmer.mars@gmail.com">augustin.programmer.mars@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/monumentality"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">monumentality</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/Augustin Mars"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">Augustin Mars</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
