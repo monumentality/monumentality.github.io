@@ -5,9 +5,132 @@
     <description></description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 20 May 2016 12:36:53 +0800</pubDate>
-    <lastBuildDate>Fri, 20 May 2016 12:36:53 +0800</lastBuildDate>
+    <pubDate>Mon, 13 Jun 2016 05:34:24 +0800</pubDate>
+    <lastBuildDate>Mon, 13 Jun 2016 05:34:24 +0800</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
+    
+      <item>
+        <title>cloudos</title>
+        <description>&lt;div id=&quot;table-of-contents&quot;&gt;
+&lt;h2&gt;Table of Contents&lt;/h2&gt;
+&lt;div id=&quot;text-table-of-contents&quot;&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1&quot;&gt;1. 虚拟机化的容器？&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-1&quot;&gt;1.1. 在物理机上直接运行容器，把容器当做完整的虚拟机来用：LXD&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-2&quot;&gt;1.2. 只使用容器的方式：joyent&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-3&quot;&gt;1.3. 虚拟机内运行容器: hyper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-1-4&quot;&gt;1.4. 容器内运行虚拟机：docker+unikernel&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2&quot;&gt;2. 数据中心的架构？&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-1&quot;&gt;2.1. 架构&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-2&quot;&gt;2.2. openstack + lxd  = openstack + hyper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-3&quot;&gt;2.3. coreos + kubernetes + docker&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-4&quot;&gt;2.4. coreos + hypernetes + docker&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-2-5&quot;&gt;2.5. coreos + mesos + kubernetes + docker + unikernel&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-3&quot;&gt;3. 容器迁移？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4&quot;&gt;4. Cloud operating system&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#sec-4-1&quot;&gt;4.1. 组成：&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;a-idsec-1-namesec-1a&quot;&gt;虚拟机化的容器？&lt;a id=&quot;sec-1&quot; name=&quot;sec-1&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;以下几种方案可能会并存：&lt;/p&gt;
+
+&lt;h2 id=&quot;lxda-idsec-1-1-namesec-1-1a&quot;&gt;在物理机上直接运行容器，把容器当做完整的虚拟机来用：LXD&lt;a id=&quot;sec-1-1&quot; name=&quot;sec-1-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;如果真的实现容器和虚拟机一样安全，隔离，那么带来的overhead应该也差不多。同一个东西的另一种实现方式，没有创新。&lt;/p&gt;
+
+&lt;p&gt;应用场景很少，我几乎想不到：公有云提供商不会卖直接运行在物理机上的容器；为了运行服务，容器当然越小越好，容器将只包含运行服务所需的最小操作系统；&lt;/p&gt;
+
+&lt;h2 id=&quot;joyenta-idsec-1-2-namesec-1-2a&quot;&gt;只使用容器的方式：joyent&lt;a id=&quot;sec-1-2&quot; name=&quot;sec-1-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.joyent.com/&quot;&gt;https://www.joyent.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;由于使用了Solaris的很多技术，保证了容器的安全和隔离，因此提供了一个没有vm的容器云。&lt;/p&gt;
+
+&lt;h2 id=&quot;hypera-idsec-1-3-namesec-1-3a&quot;&gt;虚拟机内运行容器: hyper&lt;a id=&quot;sec-1-3&quot; name=&quot;sec-1-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;利用hypervisor提供的安全和隔离，客户操作系统只是一个极简linux内核。获得了虚拟机和容器两者的优点&lt;/p&gt;
+
+&lt;h2 id=&quot;dockerunikernela-idsec-1-4-namesec-1-4a&quot;&gt;容器内运行虚拟机：docker+unikernel&lt;a id=&quot;sec-1-4&quot; name=&quot;sec-1-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;应用需要弹性扩展=&amp;gt;微服务架构=&amp;gt;容器+容器编排工具和标准=&amp;gt;容器进一步简化成为库操作系统&lt;/p&gt;
+
+&lt;p&gt;库操作系统应该是未来&lt;/p&gt;
+
+&lt;h1 id=&quot;a-idsec-2-namesec-2a&quot;&gt;数据中心的架构？&lt;a id=&quot;sec-2&quot; name=&quot;sec-2&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-2-1-namesec-2-1a&quot;&gt;架构&lt;a id=&quot;sec-2-1&quot; name=&quot;sec-2-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;宿主操作系统：各种linux，如ubuntu，coreos&lt;/p&gt;
+
+&lt;p&gt;资源管理： mesos，yarn，borg&lt;/p&gt;
+
+&lt;p&gt;作业管理/服务编排工具/分布式initd：kubernetes, coreos的flannel，mesosphere的marathon&lt;/p&gt;
+
+&lt;p&gt;客户操作系统：虚拟机中的完整linux镜像；容器中的linux基础镜像；把操作系统作为库和应用打包为一个可执行程序的unikernel;&lt;/p&gt;
+
+&lt;h2 id=&quot;openstack--lxd---openstack--hypera-idsec-2-2-namesec-2-2a&quot;&gt;openstack + lxd  = openstack + hyper&lt;a id=&quot;sec-2-2&quot; name=&quot;sec-2-2&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;docklet类似openstack +lxd&lt;/p&gt;
+
+&lt;h2 id=&quot;coreos--kubernetes--dockera-idsec-2-3-namesec-2-3a&quot;&gt;coreos + kubernetes + docker&lt;a id=&quot;sec-2-3&quot; name=&quot;sec-2-3&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;未来对于一个中小企业，租用amazon ec2 或者gce，安装coreos系统，安装kubernetes，然后部署自己公司的服务和大数据计算框架&lt;/p&gt;
+
+&lt;h2 id=&quot;coreos--hypernetes--dockera-idsec-2-4-namesec-2-4a&quot;&gt;coreos + hypernetes + docker&lt;a id=&quot;sec-2-4&quot; name=&quot;sec-2-4&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;比第二个方案更好的容器安全和资源隔离；可用于搭建公有云；也适用于企业自行搭建私有云混合云&lt;/p&gt;
+
+&lt;h2 id=&quot;coreos--mesos--kubernetes--docker--unikernela-idsec-2-5-namesec-2-5a&quot;&gt;coreos + mesos + kubernetes + docker + unikernel&lt;a id=&quot;sec-2-5&quot; name=&quot;sec-2-5&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;加入资源调度，提升资源利用率；
+未来docker会通过和unikernel集成，解决容器安全和资源隔离的问题，同时进一步提升性能，精简微服务；&lt;/p&gt;
+
+&lt;h1 id=&quot;a-idsec-3-namesec-3a&quot;&gt;容器迁移？&lt;a id=&quot;sec-3&quot; name=&quot;sec-3&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;p&gt;lxd使用criu，自称live migration, 其实不是。&lt;/p&gt;
+
+&lt;p&gt;有状态容器需要两步迁移：&lt;/p&gt;
+
+&lt;p&gt;第一步：创建snapshot, 把snapshot从node1迁移到node2；&lt;/p&gt;
+
+&lt;p&gt;第二步：在创建snapshot之后，node1上的容器接收了一些新的请求，把这些请求在node2上执行；&lt;/p&gt;
+
+&lt;p&gt;设置dns指向node2上的新容器，关闭node1上的容器。&lt;/p&gt;
+
+&lt;p&gt;已经有一些开源项目实现了容器迁移，例如flocker&lt;/p&gt;
+
+&lt;h1 id=&quot;cloud-operating-systema-idsec-4-namesec-4a&quot;&gt;Cloud operating system&lt;a id=&quot;sec-4&quot; name=&quot;sec-4&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
+
+&lt;h2 id=&quot;a-idsec-4-1-namesec-4-1a&quot;&gt;组成：&lt;a id=&quot;sec-4-1&quot; name=&quot;sec-4-1&quot;&gt;&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;宿主操作系统：各种linux，如ubuntu，coreos&lt;/p&gt;
+
+&lt;p&gt;分布式资源管理： mesos，yarn，borg&lt;/p&gt;
+
+&lt;p&gt;分布式作业管理/服务编排工具/分布式initd：kubernetes, coreos的flannel，mesosphere的marathon&lt;/p&gt;
+
+&lt;p&gt;客户操作系统：虚拟机中的完整linux镜像；容器中的linux基础镜像；把操作系统作为库和应用打包为一个可执行程序的unikernel;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 13 Jun 2016 00:00:00 +0800</pubDate>
+        <link>http://yourdomain.com/cs/2016/06/13/cloudos.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/cs/2016/06/13/cloudos.html</guid>
+        
+        
+        <category>cs</category>
+        
+      </item>
     
       <item>
         <title>stupid scheduler</title>
@@ -147,15 +270,15 @@
 
 &lt;h1 id=&quot;a-idsec-3-namesec-3a&quot;&gt;动机&lt;a id=&quot;sec-3&quot; name=&quot;sec-3&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
 
-&lt;p&gt;公平算法，所运行作业本身的价值不同；租户设定优先级，没有一个全知全能的管理员来设定优先级。&lt;/p&gt;
+&lt;p&gt;公平算法，所运行作业本身的价值不同；租户设定优先级，没有一个全知全能的管理员来设定优先级。不能有效的配置资源，不能有效地管理动态资源池。资源利用率较低。&lt;/p&gt;
 
 &lt;p&gt;基于自由市场的经济模型实现一个调度算法，依靠市场的资源配置功能实现计算资源的分配，使最高估价的作业最先得到资源。&lt;/p&gt;
 
-&lt;p&gt;当运行在支持资源弹性伸缩的公有云，私有云，混合云环境下时，我们还可以利用需求量和价格，调整资源供给，以达到价格和资源的均衡。&lt;/p&gt;
+&lt;p&gt;当运行在支持资源弹性伸缩的公有云，私有云，混合云环境下时，还可以依据系统中的资源需求量和出价，调整资源供给，达到均衡价格&lt;/p&gt;
 
 &lt;p&gt;另外，通过把资源分为可靠资源和不可靠资源，cgroup动态调整资源配额的技术，在充分利用空闲资源，满足更多资源请求的同时，确保不中断正在运行的作业，只降低这些作业的性能。&lt;/p&gt;
 
-&lt;p&gt;通过以上机制，此资源调度框实现了利用市场机制配置资源，计算资源需求和供给的均衡，并且提升了集群的资源利用率，满足更多的资源请求。&lt;/p&gt;
+&lt;p&gt;通过以上机制，此资源调度框实现了利用市场机制配置资源，动态调整资源供给达到价格均衡，并且提升了集群的资源利用率，满足更多的资源请求。&lt;/p&gt;
 
 &lt;h1 id=&quot;a-idsec-4-namesec-4a&quot;&gt;基于竞价方式的资源调度&lt;a id=&quot;sec-4&quot; name=&quot;sec-4&quot;&gt;&lt;/a&gt;&lt;/h1&gt;
 
