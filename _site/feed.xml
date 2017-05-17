@@ -3,10 +3,10 @@
   <channel>
     <title>Monumentality</title>
     <description></description>
-    <link>http://yourdomain.com/</link>
-    <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 13 Jun 2016 05:39:17 +0800</pubDate>
-    <lastBuildDate>Mon, 13 Jun 2016 05:39:17 +0800</lastBuildDate>
+    <link>http://serenity.guru/</link>
+    <atom:link href="http://serenity.guru/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 17 May 2017 15:54:56 +0800</pubDate>
+    <lastBuildDate>Wed, 17 May 2017 15:54:56 +0800</lastBuildDate>
     <generator>Jekyll v3.1.2</generator>
     
       <item>
@@ -123,9 +123,9 @@
 
 &lt;p&gt;客户操作系统：虚拟机中的完整linux镜像；容器中的linux基础镜像；把操作系统作为库和应用打包为一个可执行程序的unikernel;&lt;/p&gt;
 </description>
-        <pubDate>Mon, 13 Jun 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/06/13/cloudos.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/06/13/cloudos.html</guid>
+        <pubDate>Sat, 11 Jun 2016 00:00:00 +0800</pubDate>
+        <link>http://serenity.guru/cs/2016/06/11/cloudos.html</link>
+        <guid isPermaLink="true">http://serenity.guru/cs/2016/06/11/cloudos.html</guid>
         
         
         <category>cs</category>
@@ -903,8 +903,8 @@ def allocate(job_allocation_request):
 &lt;/div&gt;
 </description>
         <pubDate>Thu, 19 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/05/19/stupid_scheduler.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/19/stupid_scheduler.html</guid>
+        <link>http://serenity.guru/cs/2016/05/19/stupid_scheduler.html</link>
+        <guid isPermaLink="true">http://serenity.guru/cs/2016/05/19/stupid_scheduler.html</guid>
         
         
         <category>cs</category>
@@ -938,8 +938,8 @@ In Illuminatus!, a satirical study of social pathologies, Robert Anton Wilson an
 &lt;p&gt;Accidental Empires, by Robert X. Cringely (Harper Business, 1992, ISBN 0-88730-621-7), Hackers by Steven Levy (Dell, 1984, ISBN 0-440-13405-6), and The Soul of a New Machine by Tracy Kidder (Little, Brown, 1981, ISBN 0316491705) are good depictions of life in the world of Real Programmers that ring true based on my own experience. These books also have good insights into the strange world of startups: why they succeed or fail, and what happens to the people who propel them. Although Kidder’s book sounds very upbeat, De Marco notes in Peopleware (see `Readings in human factors’) that almost everyone left the company shortly after the period described in the book.&lt;/p&gt;
 </description>
         <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Two-concepts-of-social-structure.html</guid>
+        <link>http://serenity.guru/cs/2016/05/07/Two-concepts-of-social-structure.html</link>
+        <guid isPermaLink="true">http://serenity.guru/cs/2016/05/07/Two-concepts-of-social-structure.html</guid>
         
         
         <category>cs</category>
@@ -1016,8 +1016,8 @@ Noel said that in only about 30% of the cases was it necessary to go to step 3.&
 &lt;p&gt;核心原则是：尽最大努力让对方先说一个数字，这表示公司更需要你，而不是你更需要这份工作。这将会后续具体谈判打下一个坚固的基础&lt;/p&gt;
 </description>
         <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</guid>
+        <link>http://serenity.guru/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</link>
+        <guid isPermaLink="true">http://serenity.guru/research/2016/05/07/The-Noel-Smith-Wenkle-Salary-Negotiation-Method.html</guid>
         
         
         <category>research</category>
@@ -1055,8 +1055,8 @@ Noel said that in only about 30% of the cases was it necessary to go to step 3.&
 
 </description>
         <pubDate>Sat, 07 May 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</guid>
+        <link>http://serenity.guru/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</link>
+        <guid isPermaLink="true">http://serenity.guru/cs/2016/05/07/Gandhi-an-approach-to-nonviolent-social-change.html</guid>
         
         
         <category>cs</category>
@@ -1664,8 +1664,8 @@ weighted fair sharing [31, 52].&lt;/p&gt;
 &lt;/div&gt;
 </description>
         <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/research/2016/03/13/big-data-and-ssd.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/research/2016/03/13/big-data-and-ssd.html</guid>
+        <link>http://serenity.guru/research/2016/03/13/big-data-and-ssd.html</link>
+        <guid isPermaLink="true">http://serenity.guru/research/2016/03/13/big-data-and-ssd.html</guid>
         
         
         <category>research</category>
@@ -1807,8 +1807,8 @@ good scientists will fight the system rather than learn to work with the system 
 &lt;p&gt;they don’t work on important problems, they don’t become emotionally involved, they don’t try and change what is difficult to some other situation which is easily done but is still important, and they keep giving themselves alibis why they don’t. They keep saying that it is a matter of luck. I’ve told you how easy it is; furthermore I’ve told you how to reform. Therefore, go forth and become great scientists!&lt;/p&gt;
 </description>
         <pubDate>Sun, 13 Mar 2016 00:00:00 +0800</pubDate>
-        <link>http://yourdomain.com/cs/2016/03/13/you-and-your-research.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/cs/2016/03/13/you-and-your-research.html</guid>
+        <link>http://serenity.guru/cs/2016/03/13/you-and-your-research.html</link>
+        <guid isPermaLink="true">http://serenity.guru/cs/2016/03/13/you-and-your-research.html</guid>
         
         
         <category>cs</category>
